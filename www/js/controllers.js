@@ -621,9 +621,12 @@ angular.module('xiaoyoutong.controllers', [])
   
   $scope.$on('$ionicView.beforeEnter', function(event, data) {
     var user = UserService.currentUser();
-    console.log(user);
     if (!user) {
       user = { avatar: 'img/default_avatar.png', nickname: '立即登录' };
+    } else {
+      if (user.avatar === '') {
+        user.avatar = 'img/default_avatar.png';
+      }
     }
     $scope.user = user;
   });
@@ -665,27 +668,219 @@ angular.module('xiaoyoutong.controllers', [])
 })
 
 // 我的
-.controller('UserCtrl', function($scope, $state, DataService, $ionicLoading, UserService) {
-  $scope.user = UserService.currentUser();
-  // DataService.get('/user/organizations', { token: '' }).then(function(response){
-  //   $scope.organizations = response.data.data;
-  // }, function(error) {
+.controller('UserCtrl', function($scope, $state, FormCheck, PopupService, DataService, $ionicLoading, UserService, AWToast) {
+  
+  $scope.noReadonly = false;
+
+  var currentUser = UserService.currentUser();
+  // console.log('000');
+  // $scope.$on('$ionicView:beforeEnter', function(event, data) {
+  //   console.log('11111');
+    var token = null;
+    if (currentUser) {
+      token = currentUser.token;
+    }
     
-  // }).finally(function(){
-  //   $ionicLoading.hide();
-  // })
-  console.log($scope.user);
+    if (token) {
+      $ionicLoading.show();
+      DataService.get('/user/me', { token: token })
+      .then(function(res) {
+        if (res.data.code === 0) {
+          $scope.user = res.data.data;
+          $scope.user.token = token;
+          UserService.login($scope.user);
+        } 
+      },function(err) {
+
+      })
+      .finally(function() {
+        $ionicLoading.hide();
+      });
+    }
+
+  $scope.user = currentUser;
+
+  if ($scope.user) {
+    $scope.updateUser = { nickname: '', mobile: $scope.user.mobile, new_mobile: '', code: '', password: '' };
+  } else {
+    $scope.updateUser = { nickname: '', mobile: '', new_mobile: '', code: '', password: '' };
+  }
 
   $scope.updateNickname = function() {
-    $state.go('tab.profile-update-nickname');
+    $state.go('app.update-nickname');
+  };
+
+  // 获取验证码
+  $scope.doFetchCode = function() {
+    if ( !FormCheck.not_blank($scope.updateUser.mobile, '手机号不能为空') || 
+    !FormCheck.regex_validate($scope.updateUser.mobile, /^1[34578]\d{9}$/, '手机号不正确') ) {
+      return;
+    }
+
+    $ionicLoading.show();
+    DataService.post('/auth_codes', { mobile: $scope.updateUser.mobile }).then(function(res) {
+      if (res.data.code == 0) {
+        AWToast.showText('短信验证码已发送', 1500);
+      } else {
+        console.log(res.data.message)
+        AWToast.showText(res.data.message, 1500);
+      }
+      console.log(res);
+    }, function(err) {
+      console.log(err);
+      AWToast.showText('Oops, 服务器出错了', 1500);
+    }).finally(function() {
+      $ionicLoading.hide();
+    });
+  };
+
+  // 修改昵称
+  $scope.doUpdateNickname = function() {
+    console.log($scope.updateUser);
+
+    $ionicLoading.show();
+    DataService.post('/user/update_nickname', { token: $scope.user.token, nickname: $scope.updateUser.nickname })
+      .then(function(res) {
+        if (res.data.code === 0) {
+          $state.go('app.user-profile');
+        } else {
+          console.log(res.data.message);
+        }
+      },function(err) {
+        console.log(err);
+      })
+      .finally(function() {
+        $ionicLoading.hide();
+      });
   };
 
   $scope.changeMobile = function() {
-    $state.go('tab.profile-update-mobile');
+    $state.go('app.update-mobile');
+  };
+
+  $scope.doUpdateMobile = function() {
+        console.log($scope.updateUser);
+
+    $ionicLoading.show();
+    DataService.post('/user/update_mobile', { token: $scope.user.token, mobile: $scope.updateUser.new_mobile })
+      .then(function(res) {
+        if (res.data.code === 0) {
+          $state.go('app.user-profile');
+        } else {
+          console.log(res.data.message);
+        }
+      },function(err) {
+        console.log(err);
+      })
+      .finally(function() {
+        $ionicLoading.hide();
+      });
   };
 
   $scope.updatePassword = function() {
-    $state.go('tab.profile-update-password');
+    $state.go('app.update-password');
+  };
+
+  $scope.doUpdatePassword = function() {
+
+    var params;
+    var toState;
+      params = { 
+        token: $scope.user.token, 
+        mobile: $scope.updateUser.mobile, 
+        code: $scope.updateUser.code,
+        password: $scope.updateUser.password,
+      };
+      toState = 'app.user-profile';
+    
+    $ionicLoading.show();
+    DataService.post('/user/update_password', params)
+      .then(function(res) {
+        if (res.data.code === 0) {
+          $state.go(toState);
+        } else {
+          console.log(res.data.message);
+        }
+      },function(err) {
+        console.log(err);
+      })
+      .finally(function() {
+        $ionicLoading.hide();
+      });
+  };
+
+  $scope.logout = function() {
+    
+    PopupService.ask('退出登录', '你确定吗？', function() {
+      UserService.logout();
+      $state.go('app.setting');
+    })
+
+  };
+
+})
+
+// 忘记密码
+.controller('PasswordCtrl', function($scope, $state, FormCheck, PopupService, DataService, $ionicLoading, UserService, AWToast) {
+
+  $scope.updateUser = { nickname: '', mobile: '', new_mobile: '', code: '', password: '' };
+
+  $scope.noReadonly = true;
+
+  // 获取验证码
+  $scope.fetchCode = function() {
+    // if ( !FormCheck.not_blank($scope.updateUser.mobile, '手机号不能为空') || 
+    // !FormCheck.regex_validate($scope.updateUser.mobile, /^1[34578]\d{9}$/, '手机号不正确') ) {
+    //   return;
+    // }
+
+    console.log(1111);
+
+    // $ionicLoading.show();
+    // DataService.post('/auth_codes', { mobile: $scope.updateUser.mobile }).then(function(res) {
+    //   if (res.data.code == 0) {
+    //     AWToast.showText('短信验证码已发送');
+    //   } else {
+    //     console.log(res.data.message)
+    //     // AWToast.showText(res.data.message);
+    //     $ionicLoading.show({
+    //       noBackdrop: true,
+    //       template: res.data.message,
+    //       duration: 1000,
+    //     });
+    //   }
+    //   console.log(res);
+    // }, function(err) {
+    //   console.log(err);
+    //   AWToast.showText('Oops, 服务器出错了');
+    // }).finally(function() {
+    //   $ionicLoading.hide();
+    // });
+  };
+
+  $scope.doUpdatePassword = function() {
+    
+  var params = { 
+        mobile: $scope.updateUser.mobile, 
+        code: $scope.updateUser.code,
+        password: $scope.updateUser.password,
+      };
+  var toState = 'app.login';
+  $ionicLoading.show();
+  
+  DataService.post('/user/update_password', params)
+      .then(function(res) {
+        if (res.data.code === 0) {
+          $state.go(toState);
+        } else {
+          console.log(res.data.message);
+        }
+      },function(err) {
+        console.log(err);
+      })
+      .finally(function() {
+        $ionicLoading.hide();
+      });
   };
 
 })
@@ -892,20 +1087,15 @@ angular.module('xiaoyoutong.controllers', [])
     $ionicLoading.show();
     DataService.post('/auth_codes', { mobile: $scope.user.mobile }).then(function(res) {
       if (res.data.code == 0) {
-        AWToast.showText('短信验证码已发送');
+        AWToast.showText('短信验证码已发送', 1500);
       } else {
         console.log(res.data.message)
-        // AWToast.showText(res.data.message);
-        $ionicLoading.show({
-          noBackdrop: true,
-          template: res.data.message,
-          duration: 1000,
-        });
+        AWToast.showText(res.data.message, 1500);
       }
       console.log(res);
     }, function(err) {
       console.log(err);
-      AWToast.showText('Oops, 服务器出错了');
+      AWToast.showText('Oops, 服务器出错了', 1000);
     }).finally(function() {
       $ionicLoading.hide();
     });

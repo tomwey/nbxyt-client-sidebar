@@ -4,7 +4,7 @@
 			<!-- <div class="item item-divider"></div> -->
 			<ion-item class="item-remove-animate item-block-right item-arrow item-avatar" ng-click="changeAvatar();">
 				<img ng-src="{{user.avatar}}">
-				<span class="item-block">
+				<span class="item-block" style="margin-top: 10px;">
 					更换头像
 					<i class="icon ion-chevron-right icon-accessory"></i>
 				</span>
@@ -19,7 +19,7 @@
 			<ion-item class="item-remove-animate item-block-right item-arrow" ng-click="changeMobile();">
 				更换手机
 				<div class="item-block">
-					{{user.mobile}}
+					{{user.hack_mobile}}
 					<i class="icon ion-chevron-right icon-accessory"></i>
 				</div>
 			</ion-item>
@@ -48,6 +48,9 @@
 				年级
 				<span>{{user.graduation}}</span>
 			</div>
+
+			<div class="item item-divider"></div>
+			<ion-item class="assertive" style="text-align: center;" ng-click="logout();">退出登录</ion-item>
 		</div>
 	</ion-content>
 </ion-view>

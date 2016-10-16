@@ -19,6 +19,9 @@ angular.module('xiaoyoutong.services', [])
     },
     getObject: function(key, defaultValue) {
       return JSON.parse($window.localStorage[key] || defaultValue);
+    },
+    removeObject: function(key) {
+      $window.localStorage.removeItem(key);
     }
   };
 })
@@ -74,20 +77,14 @@ angular.module('xiaoyoutong.services', [])
 })
 
 .service('UserService', function($localStorage) {
-  var defaultUser = {
-    uid: '10001',
-    token: '5caeccebb0134f198ae137c2f3f96ad7',
-    nickname: '',
-    mobile: '180****3687',
-    avatar: '',
-    realname: 'tomwey',
-    stu_no: '2005010210',
-    faculty: '核技术与自动化工程学院',
-    specialty: '工业工程',
-    graduation: '2005级'
-  };
   this.currentUser = function() {
-    return $localStorage.getObject('user', /*JSON.stringify(defaultUser)*/null);
+    var user = $localStorage.getObject('user', null);
+    if (user) {
+      if (user.avatar === '') {
+        user.avatar = 'img/default_avatar.png';
+      }
+    }
+    return user;
   };
   var _this = this;
   this.token = function() {
@@ -101,6 +98,10 @@ angular.module('xiaoyoutong.services', [])
     if (user) {
       $localStorage.storeObject('user', user);
     }
+  };
+
+  this.logout = function() {
+    $localStorage.removeObject('user');
   };
 })
 
@@ -134,7 +135,7 @@ angular.module('xiaoyoutong.services', [])
 
 .factory('AWToast', function($ionicLoading) {
   var toast = {};
-  toast.showText = function(msg, duration = 1000) {
+  toast.showText = function(msg, duration) {
     $ionicLoading.show({
       noBackdrop: true,
       template: msg,

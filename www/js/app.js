@@ -323,6 +323,37 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
     }
   })
 
+  // 修改昵称
+  .state('app.update-nickname', {
+    url: '/update-nickname',
+    views: {
+      'mainContent': {
+        templateUrl: 'templates/update-nickname.html',
+        controller:  'UserCtrl',
+      }
+    }
+  })
+  // 更换手机号
+  .state('app.update-mobile', {
+    url: '/update-mobile',
+    views: {
+      'mainContent': {
+        templateUrl: 'templates/update-mobile.html',
+        controller:  'UserCtrl',
+      }
+    }
+  })
+  // 设置密码
+  .state('app.update-password', {
+    url: '/update-password',
+    views: {
+      'mainContent': {
+        templateUrl: 'templates/password.html',
+        controller:  'UserCtrl',
+      }
+    }
+  })
+
     // 加入的校友会
   .state('app.user-organizations', {
     url: '/user-organizations',
@@ -373,7 +404,7 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
     url: '/forget-password',
     views: {
       'mainContent': {
-        templateUrl: 'templates/password.html',
+        templateUrl: 'templates/forget-password.html',
         controller:  'PasswordCtrl',
       }
     }

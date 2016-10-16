@@ -96,6 +96,12 @@ angular.module('xiaoyoutong.services', [])
     }
     return null;
   };
+  this.login = function(user) {
+    console.log(user);
+    if (user) {
+      $localStorage.storeObject('user', user);
+    }
+  };
 })
 
 .service('productsService', function() {
@@ -124,6 +130,57 @@ angular.module('xiaoyoutong.services', [])
 
 .service('ordersService', function() {
   
+})
+
+.factory('AWToast', function($ionicLoading) {
+  var toast = {};
+  toast.showText = function(msg, duration = 1000) {
+    $ionicLoading.show({
+      noBackdrop: true,
+      template: msg,
+      duration: duration,
+    });
+  };
+  return toast;
+})
+
+.factory('FormCheck', function(AWToast) {
+  var form = {};
+
+  // 非空检查
+  form.not_blank = function(value, error_msg) {
+    if (!value || value.trim().length == 0) {
+      AWToast.showText(error_msg);
+      return false;
+    }
+    return true;
+  };
+
+  // 手机号验证
+  form.regex_validate = function(value, regex, error_msg) {
+    if ( !regex ) {
+      return false;
+    }
+
+    if ( !regex.test(value) ) {
+      AWToast.showText(error_msg);
+      return false;
+    }
+
+    return true;
+  };
+
+  // 长度检查
+  form.min_length = function(value, length, error_msg) {
+    if (value.length < length) {
+      AWToast.showText(error_msg);
+      return false;
+    }
+
+    return true;
+  }
+
+  return form;
 })
 
 .service('usersService', function() {

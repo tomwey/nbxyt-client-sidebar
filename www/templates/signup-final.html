@@ -1,5 +1,6 @@
 <ion-view view-title="完善资料">
 	<ion-content>
+		<form ng-submit="doRegister();">
 		<div class="list">
 			<div class="item item-divider">
 				<span class="assertive">* 以下资料一旦填写不可修改，请正确填写</span>
@@ -14,36 +15,29 @@
 			</label>
 			<label class="item item-input item-select">
 				<span class="input-label">学院</span>
-				<select ng-model="user.faculty">
+				<select ng-model="user.faculty_id" ng-change="switchFaculty(user.faculty_id)">
 					<option value="">选择学院</option>
-      				<option>林学院</option>
-      				<option>地质学院</option>
-      				<option>信息工程学院</option>
+      				<option ng-repeat="faculty in faculties" value="{{faculty.id}}">{{faculty.name}}</option>
     			</select>
 			</label>
 			<label class="item item-input item-select">
 				<span class="input-label">专业</span>
-				<select ng-model="user.specialty">
+				<select ng-model="user.specialty_id">
 					<option value="">选择专业</option>
-      				<option>工业工程</option>
-      				<option>计算机科学与技术</option>
-      				<option>软件工程</option>
-      				<option>土木工程</option>
+      				<option ng-repeat="specialty in specialties" value="{{specialty.id}}">{{specialty.name}}</option>
     			</select>
 			</label>
 			<label class="item item-input item-select">
 				<span class="input-label">年级</span>
-				<select ng-model="user.graduation">
+				<select ng-model="user.graduation_id">
 					<option value="">选择年级</option>
-      				<option>2005级</option>
-      				<option>2006级</option>
-      				<option>2007级</option>
-      				<option>2008级</option>
+      				<option value="{{graduation.id}}" ng-repeat="graduation in graduations">{{graduation.name}}</option>
     			</select>
 			</label>
 			<label class="item">
-				<button class="button button-block button-assertive">提交</button>
+				<button type="submit" class="button button-block button-assertive">提交</button>
 			</label>
 		</div>
+		</form>
 	</ion-content>
 </ion-view>

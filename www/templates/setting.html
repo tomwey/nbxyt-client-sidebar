@@ -1,7 +1,7 @@
 <ion-view view-title="我的">
   <ion-content>
     <div class="list">
-    	<ion-item class="item item-icon-right item-avatar" href="#/user-profile">
+    	<ion-item class="item item-icon-right item-avatar" ng-click="gotoProfile();">
     		<img ng-src="{{user.avatar}}" alt="{{user.nickname}}">
     		<div class="row">
     			<div class="col col-center">
@@ -11,15 +11,15 @@
     		<i class="icon ion-chevron-right icon-accessory"></i>
     	</ion-item>
     	<div class="item item-divider"></div>
-    	<ion-item class="item-remove-animate item-icon-right" href="#/tab/user-organizations">
+    	<ion-item class="item-remove-animate item-icon-right" ng-click="gotoUserOrganizations();">
     		加入的校友会
     		<i class="icon ion-chevron-right icon-accessory"></i>
     	</ion-item>
-    	<ion-item class="item-remove-animate item-icon-right" href="#/tab/user-clubs">
+    	<ion-item class="item-remove-animate item-icon-right" ng-click="gotoUserClubs();">
     		加入的俱乐部
     		<i class="icon ion-chevron-right icon-accessory"></i>
     	</ion-item>
-    	<ion-item class="item-remove-animate item-icon-right" href="#/tab/user-events">
+    	<ion-item class="item-remove-animate item-icon-right" ng-click="gotoUserEvents();">
     		参加的活动
     		<i class="icon ion-chevron-right icon-accessory"></i>
     	</ion-item>
@@ -56,11 +56,11 @@
     		关于
     		<i class="icon ion-chevron-right icon-accessory"></i>
     	</ion-item>
-    	<div class="item item-divider"></div>
+<!--     	<div class="item item-divider"></div>
     	<div style="text-align: center;">
     	<a href="" ng-click="doLogout();" class="item item-content assertive">退出登录</a>
     		
-    	</div>
+    	</div> -->
     </div>
   </ion-content>
 </ion-view>

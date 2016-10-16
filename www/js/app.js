@@ -40,8 +40,9 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
 
 .run(function($ionicPlatform, $rootScope, $localStorage, UserService, $state) {
 
-  $rootScope.login = function() {
+  $rootScope.login = function(from) {
     // console.log('login');
+    $rootScope.login_from = from;
     $state.go('app.login');
   };
   
@@ -311,6 +312,51 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
     }
   })
 
+  // 个人资料
+  .state('app.user-profile', {
+    url: '/user-profile',
+    views: {
+      'mainContent': {
+        templateUrl: 'templates/user-profile.html',
+        controller:  'UserCtrl',
+      }
+    }
+  })
+
+    // 加入的校友会
+  .state('app.user-organizations', {
+    url: '/user-organizations',
+    views: {
+      'mainContent': {
+        templateUrl: 'templates/user-organizations.html',
+        controller:  'UserOrganizationsCtrl',
+      }
+    }
+  })
+
+    // 加入的俱乐部
+  .state('app.user-clubs', {
+    url: '/user-clubs',
+    views: {
+      'mainContent': {
+        templateUrl: 'templates/user-clubs.html',
+        controller:  'UserClubsCtrl',
+      }
+    }
+  })
+
+    // 参加的活动
+  .state('app.user-events', {
+    url: '/user-events',
+    views: {
+      'mainContent': {
+        templateUrl: 'templates/user-events.html',
+        controller:  'UserEventsCtrl',
+      }
+    }
+  })
+
+/////////////////////////////////////////////////////////////////////////////
   // 登录
   .state('app.login', {
     url: '/login',
@@ -350,7 +396,7 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
     views: {
       'mainContent': {
         templateUrl: 'templates/signup-final.html',
-        controller:  'SignupCtrl',
+        controller:  'SignupFinalCtrl',
       }
     }
   })

@@ -1,6 +1,6 @@
 <ion-view view-title="注册">
 	<ion-content>
-		<form ng-submit="doRegister();" class="signup-form">
+		<form ng-submit="doCheckCode();" class="signup-form">
 			<div class="list">
 				<div class="item item-divider"></div>
 				<div class="item">
@@ -37,7 +37,7 @@
 							<span class="label">密码</span>
 						</div>
 						<div class="col col-70 col-center">
-							<input type="password" ng-model="user.password" placeholder="输入11位手机号">
+							<input type="password" ng-model="user.password" placeholder="密码至少6位">
 						</div>
 					</div>
 				</div>

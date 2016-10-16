@@ -77,7 +77,7 @@ angular.module('xiaoyoutong.controllers', [])
 // 校友组织详情
 .controller('OrganizationDetailCtrl', function($scope, $stateParams, DataService, $ionicLoading, $ionicPopup, UserService, PopupService, $state, $rootScope) {
 
-  $scope.$on('$ionicView.beforeEnter', function(event, data) {
+  var loadData = function() {
     $scope.has_joined = false;
   
       var params = null;
@@ -103,7 +103,9 @@ angular.module('xiaoyoutong.controllers', [])
       }, function(err) {
         $ionicLoading.hide();
       });
-  });
+  };
+
+  loadData();
 
   function doRemove() {
     $ionicLoading.show();
@@ -133,7 +135,7 @@ angular.module('xiaoyoutong.controllers', [])
 
     console.log(token);
     if (!token) {
-      $rootScope.login();
+      $rootScope.login('app.organization');
     } else {
       $ionicLoading.show();
       DataService.post('/relationships/organization/join', { token: token, id: $scope.organ_id }).then(function(resp){
@@ -239,7 +241,7 @@ angular.module('xiaoyoutong.controllers', [])
     $scope.club_id = id;
     var token = UserService.token();
     if (!token) {
-      $rootScope.login();
+      $rootScope.login('app.club');
     } else {
       $ionicLoading.show();
       DataService.post('/relationships/club/join', { token: token, id: $scope.club_id }).then(function(resp){
@@ -359,7 +361,7 @@ angular.module('xiaoyoutong.controllers', [])
     $scope.event_id = id;
     var token = UserService.token();
     if (!token) {
-      $rootScope.login();
+      $rootScope.login('app.event');
     } else {
       $ionicLoading.show();
       DataService.post('/attends', { token: UserService.token(), event_id: $scope.event_id }).then(function(resp){
@@ -560,7 +562,7 @@ angular.module('xiaoyoutong.controllers', [])
   });
 
   $scope.gotoApply = function() {
-    $state.go('tab.donate-apply');
+    $state.go('app.donate-apply');
   };
 })
 
@@ -615,18 +617,43 @@ angular.module('xiaoyoutong.controllers', [])
 })
 
 // 个人中心页面
-.controller('SettingsCtrl', function($scope, $state, UserService) {
-  $scope.user = UserService.currentUser();
+.controller('SettingsCtrl', function($scope, $state, UserService, $rootScope) {
   
-  $scope.gotoProfile = function() {
+  $scope.$on('$ionicView.beforeEnter', function(event, data) {
+    var user = UserService.currentUser();
+    console.log(user);
+    if (!user) {
+      user = { avatar: 'img/default_avatar.png', nickname: '立即登录' };
+    }
+    $scope.user = user;
+  });
+  
+  var forwardTo = function(state) {
     var token = UserService.token();
     
     if (!token) {
-      $rootScope.login();
+      $rootScope.login('app.setting');
     } else {
-      $state.go('tab.profile');
+      $state.go(state);
     }
   };
+
+  $scope.gotoProfile = function() {
+    forwardTo('app.user-profile');
+  };
+
+  $scope.gotoUserOrganizations = function() {
+    forwardTo('app.user-organizations');
+  };
+
+  $scope.gotoUserClubs = function() {
+    forwardTo('app.user-clubs');
+  };
+
+  $scope.gotoUserEvents = function() {
+    forwardTo('app.user-events');
+  };
+
   // $scope.gotoOrders = function(state = '') {
   //   if (state.length == 0) {
   //     $state.go('tab.orders');
@@ -786,11 +813,31 @@ angular.module('xiaoyoutong.controllers', [])
 })
 
 // 登录
-.controller('LoginCtrl', function($scope, $state, $rootScope) {
+.controller('LoginCtrl', function($scope, $state, $rootScope, DataService, $ionicLoading, FormCheck, UserService) {
   $scope.user = {mobile: '', password: ''};
 
   $scope.doLogin = function() {
-    usersService.login($scope.user);
+    // usersService.login($scope.user);
+    if ( !FormCheck.not_blank($scope.user.mobile, '手机号不能为空') ||
+         !FormCheck.regex_validate($scope.user.mobile, /^1[34578]\d{9}$/, '手机号不正确') ||
+         !FormCheck.not_blank($scope.user.password, '密码不能为空')) { 
+      return;
+    }
+
+    $ionicLoading.show();
+    DataService.post('/account/login', $scope.user).then(function(res) {
+      if (res.data.code === 0) {
+        UserService.login(res.data.data);
+        $state.go($rootScope.login_from);
+      } else {
+        console.log(res.data.message);
+      }
+    }, function(err) {
+      console.log(err);
+    }).finally(function() {
+      $ionicLoading.hide();
+    })
+
   };
   $scope.gotoForgetPassword = function() {
     $state.go('app.forget-password');
@@ -801,15 +848,143 @@ angular.module('xiaoyoutong.controllers', [])
 })
 
 // 注册
-.controller('SignupCtrl', function($scope, $state) {
+.controller('SignupCtrl', function($scope, $state, AWToast, FormCheck, DataService, $ionicLoading, $filter, $rootScope) {
   $scope.user = {mobile: '', password: '', code: ''};
-  $scope.doRegister = function() {
+
+  $scope.doCheckCode = function() {
     // alert('2222');
-    $state.go('signup-final');
+    // $state.go('signup-final');
+    if ( !FormCheck.not_blank($scope.user.mobile, '手机号不能为空') || 
+         !FormCheck.regex_validate($scope.user.mobile, /^1[34578]\d{9}$/, '手机号不正确') ||
+         !FormCheck.not_blank($scope.user.code, '验证码不能为空') ||
+         !FormCheck.min_length($scope.user.password, 6, '密码太短，至少为6位') ) {
+      return;
+    }
+
+    // 校验验证码
+    $ionicLoading.show();
+
+    DataService.get('/auth_codes/check', { mobile: $scope.user.mobile, code: $scope.user.code })
+      .then(function(res) {
+        if (res.data.code === 0) {
+          $rootScope.signupForm = $scope.user;
+          $state.go('app.signup-final');
+        } else {
+          console.log(res.data.message);
+        }
+      }, function(err) {
+        console.log(err);
+      })
+      .finally(function(){
+        $ionicLoading.hide();
+      });
+
   };
+
+  // 获取验证码
   $scope.doFetchCode = function() {
-    alert('123');
+    // alert('123');
+    if ( !FormCheck.not_blank($scope.user.mobile, '手机号不能为空') || 
+    !FormCheck.regex_validate($scope.user.mobile, /^1[34578]\d{9}$/, '手机号不正确') ) {
+      return;
+    }
+
+    $ionicLoading.show();
+    DataService.post('/auth_codes', { mobile: $scope.user.mobile }).then(function(res) {
+      if (res.data.code == 0) {
+        AWToast.showText('短信验证码已发送');
+      } else {
+        console.log(res.data.message)
+        // AWToast.showText(res.data.message);
+        $ionicLoading.show({
+          noBackdrop: true,
+          template: res.data.message,
+          duration: 1000,
+        });
+      }
+      console.log(res);
+    }, function(err) {
+      console.log(err);
+      AWToast.showText('Oops, 服务器出错了');
+    }).finally(function() {
+      $ionicLoading.hide();
+    });
   };
+})
+
+// 注册第二步
+.controller('SignupFinalCtrl', function($scope, $state, AWToast, FormCheck, DataService, $ionicLoading, $filter, $rootScope, UserService) {
+  $scope.user = {mobile: '', password: '', code: '', realname: '',
+stu_no: '', faculty_id: '', specialty_id: '', graduation_id: ''};
+
+  $scope.faculties = [];
+  $scope.specialties = [];
+  $scope.graduations = [];
+
+  $ionicLoading.show();
+  DataService.get('/college/specialties')
+    .then(function(res) {
+      $scope.faculties = res.data.data;
+    }, function(err) {
+      console.log(err);
+    })
+    .finally(function() {
+      // 加载班级
+      DataService.get('/college/graduations')
+      .then(function(res) {
+        $scope.graduations = res.data.data;
+      }, function(err) {
+        console.log(err);
+      })
+      .finally(function() {
+        $ionicLoading.hide();
+      });
+    });
+
+  // 切换数据
+  $scope.switchFaculty = function(fid) {
+    var currentFaculty = $filter('filter')($scope.faculties, { id: fid });
+    if (currentFaculty.length > 0) {
+      $scope.specialties = currentFaculty[0].specialties;
+    }
+  };
+
+  $scope.doRegister = function() {
+    $scope.user.mobile = $rootScope.signupForm.mobile;
+    $scope.user.password = $rootScope.signupForm.password;
+    $scope.user.code = $rootScope.signupForm.code;
+
+    if ( !FormCheck.not_blank($scope.user.mobile, '手机号不能为空') || 
+         !FormCheck.regex_validate($scope.user.mobile, /^1[34578]\d{9}$/, '手机号不正确') ||
+         !FormCheck.not_blank($scope.user.code, '验证码不能为空') ||
+         !FormCheck.min_length($scope.user.password, 6, '密码太短，至少为6位') ||
+         !FormCheck.not_blank($scope.user.realname, '真实姓名不能为空') ||
+         !FormCheck.not_blank($scope.user.faculty_id, '必须选择院系') ||
+         !FormCheck.not_blank($scope.user.specialty_id, '必须选择专业') ||
+         !FormCheck.not_blank($scope.user.graduation_id, '必须选择班级') ) {
+      return;
+    }
+
+    console.log($scope.user);
+
+    // 提交注册
+    $ionicLoading.show();
+    DataService.post('/account/signup', $scope.user)
+      .then(function(res) {
+        if (res.data.code === 0) {
+          UserService.login(res.data.data);
+          $state.go($rootScope.login_from);
+        } else {
+          console.log(res.data.message);
+        }
+      }, function(err) {
+        console.log(err);
+      })
+      .finally(function() {
+        $ionicLoading.hide();
+    });
+  };
+
 })
 
 .controller('PasswordCtrl', function($scope, $state) {

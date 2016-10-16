@@ -1,0 +1,39 @@
+<ion-view view-title="更换手机">
+	<ion-content>
+		<form ng-submit="doUpdateMobile()" class="signup-form">
+			<div class="list">
+				<div class="item item-divider"></div>
+
+				<div class="item">
+					<!-- 验证码 -->
+					<div class="row">
+						<div class="col col-20 col-center">
+							<span class="label">手机号</span>
+						</div>
+						<div class="col col-50 col-center">
+							<input type="text" ng-model="user.new_mobile" placeholder="输入新手机号">
+						</div>
+						<div class="col col-30 col-center offset-50">
+							<a class="assertive code-button" ng-click="doFetchCode();">获取验证码</a>
+						</div>
+					</div>
+				</div>
+
+				<div class="item">
+					<div class="row">
+						<div class="col col-20 col-center">
+							<span class="label">验证码</span>
+						</div>
+						<div class="col col-70 col-center">
+							<input type="text" ng-model="user.code" placeholder="输入短信验证码">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="padding">
+				<button type="submit" class="button button-block button-assertive">验证并更换</button>
+			</div>
+			
+		</form>
+	</ion-content>
+</ion-view>

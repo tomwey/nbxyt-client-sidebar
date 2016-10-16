@@ -1,0 +1,26 @@
+<ion-view view-title="马上捐赠">
+	<ion-content>
+		<form ng-submit="commitApply();">
+			<div class="list">
+		  		<label class="item item-input item-stacked-label">
+		    		<textarea placeholder="捐赠介绍" rows="10" ng-model="donate_apply.content"></textarea>
+		  		</label>
+		  		<label class="item item-input item-stacked-label">
+		    		<input type="text" placeholder="联系方式" ng-model="donate_apply.contact">
+		  		</label>
+		  		<label class="item">
+          			<button class="button button-block button-positive" type="submit">提交</button>
+        		</label>
+			</div>
+		</form>
+		
+		<div class="list">
+			<div class="item item-divider"></div>
+			<div class="item">
+				<h2 style="font-size: 18px;">捐赠快速通道：</h2>
+				<p style="font-size: 18px; margin-top: 10px;"><a href="tel:02868886888">028-68886888</a></p>
+			</div>
+		</div>
+	</ion-content>
+
+</ion-view>

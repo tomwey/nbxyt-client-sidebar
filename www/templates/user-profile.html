@@ -1,0 +1,53 @@
+<ion-view view-title="个人资料">
+	<ion-content>
+		<div class="list">
+			<!-- <div class="item item-divider"></div> -->
+			<ion-item class="item-remove-animate item-block-right item-arrow item-avatar" ng-click="changeAvatar();">
+				<img ng-src="{{user.avatar}}">
+				<span class="item-block">
+					更换头像
+					<i class="icon ion-chevron-right icon-accessory"></i>
+				</span>
+			</ion-item>
+			<ion-item class="item-remove-animate item-block-right item-arrow" ng-click="updateNickname();">
+				昵称
+				<div class="item-block">
+					{{user.nickname == '' ? '未设置' : user.nickname }}
+					<i class="icon ion-chevron-right icon-accessory"></i>
+				</div>
+			</ion-item>
+			<ion-item class="item-remove-animate item-block-right item-arrow" ng-click="changeMobile();">
+				更换手机
+				<div class="item-block">
+					{{user.mobile}}
+					<i class="icon ion-chevron-right icon-accessory"></i>
+				</div>
+			</ion-item>
+			<ion-item class="item-remove-animate item-icon-right" ng-click="updatePassword();">
+				修改密码
+				<i class="icon ion-chevron-right icon-accessory"></i>
+			</ion-item>
+			<div class="item item-divider"></div>
+			<div class="item item-text-right">
+				真实姓名
+				<span>{{user.realname}}</span>
+			</div>
+			<div class="item item-text-right">
+				学号
+				<span>{{user.stu_no}}</span>
+			</div>
+			<div class="item item-text-right">
+				学院
+				<span>{{user.faculty}}</span>
+			</div>
+			<div class="item item-text-right">
+				专业
+				<span>{{user.specialty}}</span>
+			</div>
+			<div class="item item-text-right">
+				年级
+				<span>{{user.graduation}}</span>
+			</div>
+		</div>
+	</ion-content>
+</ion-view>

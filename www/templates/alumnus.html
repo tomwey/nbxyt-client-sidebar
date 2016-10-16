@@ -1,0 +1,19 @@
+<ion-view view-title="同学录">
+  <ion-content>
+  	<ion-list>
+  		<ion-item class="">
+  			<label class="item item-input">
+    			<i class="icon ion-search placeholder-icon"></i>
+    			<input type="text" placeholder="输入昵称或者专业">
+  			</label>
+  		</ion-item>
+  		<ion-item class="item-divider"></ion-item>
+  		<ion-item class="item-remove-animate item-avatar item-icon-right item-button-right" ng-repeat="obj in alumnus" type="item-text-wrap" href="">
+        <img ng-src="{{obj.avatar}}">
+        <h2>{{obj.nickname}}</h2>
+        <p>{{obj.specialty}}&nbsp;&nbsp;{{obj.graduation}}</p>
+        <button class="button button-positive button-outline" style="font-size: 14px;">私信</button>
+      </ion-item>
+  	</ion-list>
+  </ion-content>
+</ion-view>

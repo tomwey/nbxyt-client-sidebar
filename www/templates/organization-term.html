@@ -1,0 +1,42 @@
+<ion-view view-title="校友总会">
+	<ion-content>
+    <div class="list">
+      <div class="item item-image">
+        <ion-slide-box auto-play="true" does-continue="true" show-pager="true" id="detail-slide-box" delegate-handle="slideimgs">
+          <ion-slide ng-repeat="image in organization.images">
+            <img ng-src="{{image}}" alt="" class="banner-image">
+          </ion-slide>           
+        </ion-slide-box>
+      </div>
+      
+			<div class="item item-text-wrap">
+				<h2>{{organization.name}}</h2>
+				<p>创建时间：{{organization.founded_on}}</p>
+				<p>成员：{{organization.users_count}}</p>
+			</div>
+    </div>
+    
+		<div class="list card">
+			<div class="item item-divider">
+				<h2>介绍</h2>
+			</div>
+			<div class="item item-text-wrap body-html" ng-bind-html="organization.body">
+				
+			</div>
+		</div>
+    
+		<!-- 校友组织活动 -->
+		<div class="card list" ng-show="isShowEvents">
+			<div class="item item-divider"><h2>最新活动</h2></div>
+			<ion-item class="item-remove-animate item item-thumbnail-left item-icon-right item-text-wrap" ng-repeat="event in organization.latest_events" 
+				href="#/tab/events/{{event.id}}">
+				<img ng-src="{{event.image}}">
+    			<h2>{{event.title}}</h2>
+    			<p style="font-size: 12px;">活动时间：{{event.started_at}}</p>
+    			<i class="icon ion-chevron-right icon-accessory"></i>
+			</ion-item>
+			<a class="item item-divider" href="#/app/events-Organization" ng-show="isShowLoadMoreEvents"><h2>查看全部活动</h2></a>
+		</div>
+    
+  </ion-content>
+</ion-view>

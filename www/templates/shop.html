@@ -1,0 +1,13 @@
+<ion-view view-title="产品智联">
+  <ion-content>
+    <ion-list>
+    	<ion-item class="item-remove-animate item item-thumbnail-left item-icon-right item-text-wrap" ng-repeat="product in products" href="#/tab/products/{{product.sku}}">
+        		<img ng-src="{{product.image}}">
+        		<h2>{{product.title}}</h2>
+        		<p>{{product.intro}}</p>
+        		<p><span class="product-price">{{product.price}}</span>&nbsp;&nbsp;<span class="product-market-price">{{product.market_price}}</span></p>
+        		<i class="icon ion-chevron-right icon-accessory"></i>
+      		</ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

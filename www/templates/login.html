@@ -1,0 +1,31 @@
+<ion-view view-title="登录">
+	<ion-content class="padding">
+		<form ng-submit="doLogin()">
+			<div class="list list-inset">
+				<!-- <div class="item item-divider"></div> -->
+
+				<label class="item item-input">
+					<!-- <span class="input-label">手机</span> -->
+					<input type="text" ng-model="user.mobile" placeholder="手机号">
+				</label>
+				<label class="item item-input">
+					<!-- <span class="input-label">密码</span> -->
+					<input type="password" ng-model="user.password" placeholder="密码">
+				</label>
+				<!-- <label class="item">
+					<button type="submit" class="button button-block button-assertive">登录</button>
+				</label> -->
+
+			</div>
+			<button type="submit" class="button button-block button-assertive">登录</button>
+		</form>
+		<div class="row">
+			<div class="col col-50" style="text-align: left; cursor: pointer;" ng-click="gotoForgetPassword();">
+				忘记密码
+			</div>
+			<div class="col col-50" style="text-align: right; cursor: pointer;" ng-click="gotoSignup();">
+				没有账号？去注册
+			</div>
+		</div>
+	</ion-content>
+</ion-view>

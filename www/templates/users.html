@@ -1,0 +1,12 @@
+<ion-view view-title="同学录">
+  <ion-content>
+  	<ion-list>
+  		<ion-item class="item-remove-animate item-avatar item-icon-right item-button-right" ng-repeat="user in users" type="item-text-wrap" href="">
+        <img ng-src="{{user.avatar}}">
+        <h2>{{user.nickname}}</h2>
+        <p>{{user.specialty}}&nbsp;&nbsp;{{user.graduation}}</p>
+        <button class="button button-positive button-outline" style="font-size: 14px;">私信</button>
+      </ion-item>
+  	</ion-list>
+  </ion-content>
+</ion-view>

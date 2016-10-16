@@ -1,0 +1,38 @@
+<ion-view hide-tabs>
+  <ion-nav-title>{{club.name}}</ion-nav-title>
+	<ion-content>
+		<div class="list card">
+			<div class="item item-image">
+				<img ng-src="{{club.image}}">
+			</div>
+			<div class="item item-text-wrap">
+				<h2>{{club.name}}</h2>
+				<p>创建时间：{{club.founded_on}}</p>
+				<p>成员：{{club.users_count}}</p>
+			</div>
+		</div>
+		<div class="list card">
+			<div class="item item-divider">
+				<h2>简介</h2>
+			</div>
+			<div class="item item-text-wrap body-html" ng-bind-html="club.body">
+				
+			</div>
+		</div>
+    
+		<div class="list card">
+			<div class="item item-divider">
+				<h2>俱乐部章程</h2>
+			</div>
+			<div class="item item-text-wrap body-html" ng-bind-html="club.body">
+				
+			</div>
+		</div>
+		
+	</ion-content>
+	<ion-footer-bar class="bar-assertive">
+    	<div class="title" style="text-align: center; margin: 0 -10px; cursor: pointer;" ng-click="doRemoveClub(club.id);">
+      		移除
+    	</div>
+	</ion-footer-bar>
+</ion-view>

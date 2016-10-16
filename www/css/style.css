@@ -1,0 +1,88 @@
+/* Empty. Add your own CSS if you like */
+
+.banner-image {
+	max-width: 100%;
+	width: 100%;
+}
+
+.page img {
+  max-width: 100%;
+}
+
+.body-html {
+	text-align: left;
+	padding: 10px;
+	font-size: 14px;
+}
+
+.body-html img {
+	max-width: 100%;
+	text-align: center;
+}
+
+.product-price {
+	font-size: 22px;
+	color: red;
+}
+
+.product-market-price {
+	font-size: 14px;
+	color: #ccc;
+	text-decoration: line-through;
+}
+.user-caption {
+	height: 200px;
+	background-color: rgb(234,74,50);
+}
+
+.last-message-time {
+	position: absolute;
+	right: 15px;
+	top: 15px;
+	color: #8c8c8c;
+    font-size: 13px;
+}
+
+.input-label {
+	width: 20%;
+}
+
+.signup-form .item {
+	padding: 0;
+}
+
+.signup-form .row {
+	padding: 1px 0;
+}
+
+.signup-form .label {
+	padding-left: 8px;
+}
+
+.signup-form .item-signup {
+	padding: 16px;
+}
+
+.code-button {
+	padding: 5px;
+	cursor: pointer;
+}
+
+.item-text-right span, .item-text-right p  {
+	float: right;
+	display: inline-block;
+}
+
+.item-block-right .item-block {
+	display: inline-block;
+	float: right;
+}
+
+.item-block-left .item-block {
+	float: left;
+	display: block;
+}
+
+.item-arrow .icon {
+	color: rgb(204,204,204);
+}

@@ -1,0 +1,36 @@
+<!--
+  This template loads for the 'tab.friend-detail' state (app.js)
+  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
+  The FriendsCtrl pulls data from the Friends service (service.js)
+  The Friends service returns an array of friend data
+-->
+<ion-view view-title="活动详情" hide-tabs>
+  <ion-content>
+    <div class="card list">
+      <div class="item item-image">
+        <img ng-src="{{event.image}}">
+      </div>
+      <div class="item item-text-wrap">
+        <h2>{{event.title}}</h2>
+        <p>开始时间：{{event.started_at}}</p>
+        <p>结束时间：{{event.ended_at}}</p>
+        <p ng-if="event.eventable_type != 'Organization'">参加人数：{{event.joined_count}} / {{event.needed_count}}</p>
+      </div>
+      <div class="item item-text-wrap item-avatar">
+    		<img ng-src="{{event.owner.image}}">
+    		<h2>{{event.owner.name}}</h2>
+    		<p>{{event.owner.intro}}</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="item item-divider"><h2>介绍</h2></div>
+      <div class="item item-text-wrap body-html" ng-bind-html="event.body">
+      </div>
+    </div>
+  </ion-content>
+	<ion-footer-bar class="bar-assertive">
+    	<div class="title" style="text-align: center; margin: 0 -10px; cursor: pointer;" ng-click="cancelAttend(event.id);">
+      		取消
+    	</div>
+	</ion-footer-bar>
+</ion-view>

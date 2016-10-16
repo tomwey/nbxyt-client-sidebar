@@ -1,0 +1,18 @@
+<ion-view view-title="意见反馈">
+	<ion-content>
+		<form ng-submit="commitFeedback();">
+			<div class="list">
+		  		<label class="item item-input item-stacked-label">
+		    		<textarea placeholder="给我提意见或建议" rows="10" ng-model="feedback.content"></textarea>
+		  		</label>
+		  		<label class="item item-input item-stacked-label">
+		    		<input type="text" placeholder="留下联系方式，以便我们表达感谢" ng-model="feedback.author">
+		  		</label>
+		  		<label class="item">
+          			<button class="button button-block button-positive" type="submit">提交</button>
+        		</label>
+			</div>
+		</form>
+	</ion-content>
+
+</ion-view>

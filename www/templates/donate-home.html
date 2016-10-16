@@ -1,0 +1,51 @@
+<!--
+  This template loads for the 'tab.friend-detail' state (app.js)
+  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
+  The FriendsCtrl pulls data from the Friends service (service.js)con
+  The Friends service returns an array of friend data
+-->
+<ion-view view-title="爱心捐赠" hide-tabs>
+	<ion-nav-buttons side="secondary">
+		<button class="button button-icon icon ion-ios-information-outline" ng-click="gotoDonateHelp();"></button>
+	</ion-nav-buttons>
+	<ion-content>
+		<!-- 最新捐赠 -->
+		<div class="card list" ng-show="isShowDonates">
+			<div class="item item-divider"><h2>最新捐赠</h2></div>
+			<ion-item class="item-remove-animate item item-thumbnail-left item-icon-right item-text-wrap" ng-repeat="donate in donatesInfo.donates.data" href="#/app/donates/{{donate.id}}">
+				<img ng-src="{{donate.image}}">
+				<h3>{{donate.title}}</h3>
+				<p>{{donate.intro}}</p>
+				<i class="icon ion-chevron-right icon-accessory"></i>
+			</ion-item>
+			<a class="item" href="#/app/donates" ng-show="donatesInfo.donates.has_more"><h2>查看全部捐赠</h2></a>
+		</div>
+		<!-- 相关报道 -->
+		<div class="card list" ng-show="isShowReports">
+			<div class="item item-divider"><h2>相关报道</h2></div>
+			<ion-item ng-class="{'item-thumbnail-left': article.image}" class="item-remove-animate item item-icon-right item-text-wrap" ng-repeat="article in donatesInfo.reports.data" href="#/app/articles/{{article.id}}">
+				<img ng-src="{{article.image}}" ng-if="article.image">
+				<h3>{{article.title}}</h3>
+				<p>{{article.published_at}}</p>
+				<i class="icon ion-chevron-right icon-accessory"></i>
+			</ion-item>
+			<a class="item" href="#/app/articles/node{{donatesInfo.reports.type_id}}" ng-show="donatesInfo.reports.has_more"><h2>更多</h2></a>
+		</div>
+		<!-- 捐赠感谢 -->
+		<div class="card list" ng-show="isShowThanks">
+			<div class="item item-divider"><h2>捐赠感谢</h2></div>
+			<ion-item class="item-remove-animate item item-thumbnail-left item-icon-right item-text-wrap" ng-repeat="article in donatesInfo.thanks.data" href="#/app/articles/{{article.id}}">
+				<img ng-src="{{article.image}}">
+				<h3>{{article.title}}</h3>
+				<p>{{article.published_at}}</p>
+				<i class="icon ion-chevron-right icon-accessory"></i>
+			</ion-item>
+			<a class="item" href="#/app/articles/node{{donatesInfo.thanks.type_id}}" ng-show="donatesInfo.thanks.has_more"><h2>更多</h2></a>
+		</div>
+  	</ion-content>
+  	<ion-footer-bar class="bar-assertive">
+    	<div class="title" style="text-align: center; margin: 0 -10px;" ng-click="gotoApply();">
+      		马上捐赠
+    	</div>
+  	</ion-footer-bar>
+</ion-view>

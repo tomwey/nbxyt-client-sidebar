@@ -1,0 +1,49 @@
+<ion-view view-title="完善资料">
+	<ion-content>
+		<div class="list">
+			<div class="item item-divider">
+				<span class="assertive">* 以下资料一旦填写不可修改，请正确填写</span>
+			</div>
+			<label class="item item-input">
+				<span class="input-label">真实姓名</span>
+				<input type="text" ng-model="user.realname" placeholder="输入真实姓名">
+			</label>
+			<label class="item item-input">
+				<span class="input-label">学号</span>
+				<input type="text" ng-model="user.stu_no" placeholder="输入学号（可选）">
+			</label>
+			<label class="item item-input item-select">
+				<span class="input-label">学院</span>
+				<select ng-model="user.faculty">
+					<option value="">选择学院</option>
+      				<option>林学院</option>
+      				<option>地质学院</option>
+      				<option>信息工程学院</option>
+    			</select>
+			</label>
+			<label class="item item-input item-select">
+				<span class="input-label">专业</span>
+				<select ng-model="user.specialty">
+					<option value="">选择专业</option>
+      				<option>工业工程</option>
+      				<option>计算机科学与技术</option>
+      				<option>软件工程</option>
+      				<option>土木工程</option>
+    			</select>
+			</label>
+			<label class="item item-input item-select">
+				<span class="input-label">年级</span>
+				<select ng-model="user.graduation">
+					<option value="">选择年级</option>
+      				<option>2005级</option>
+      				<option>2006级</option>
+      				<option>2007级</option>
+      				<option>2008级</option>
+    			</select>
+			</label>
+			<label class="item">
+				<button class="button button-block button-assertive">提交</button>
+			</label>
+		</div>
+	</ion-content>
+</ion-view>

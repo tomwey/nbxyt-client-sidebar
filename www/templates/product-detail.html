@@ -1,0 +1,33 @@
+<!--
+  This template loads for the 'tab.friend-detail' state (app.js)
+  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
+  The FriendsCtrl pulls data from the Friends service (service.js)
+  The Friends service returns an array of friend data
+-->
+<ion-view view-title="产品详情" hide-tabs>
+  <ion-content>
+    <div class="card list">
+      <div class="item item-image">
+        <img class="full-image" ng-src="{{product.image}}" alt="{{product.title}}">
+      </div>
+      <div class="item item-text-wrap">
+        <h2>{{product.title}}</h2>
+        <p><span class="product-price">{{product.price}}</span>&nbsp;&nbsp;<span class="product-market-price">{{product.market_price}}</span></p>
+        <p>运费：{{product.exp_fee}}</p>
+      </div>
+    </div>
+    <div class="list card">
+      <div class="item item-divider">
+        <h2>产品简介</h2>
+      </div>
+      <div class="item item-text-wrap" ng-bind-html="product.body">
+        
+      </div>
+    </div>
+  </ion-content>
+  <ion-footer-bar class="bar-assertive">
+    <a href="#/tab/neworder-{{product.sku}}"><div class="title" style="text-align: center; margin: 0 -10px;">
+      立即购买
+    </div></a>
+  </ion-footer-bar>
+</ion-view>

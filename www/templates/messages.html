@@ -1,0 +1,24 @@
+<ion-view view-title="消息">
+  <ion-content>
+    <ion-list>
+      <ion-item class="item-remove-animate item-avatar item-text-wrap" href="">
+        <img ng-src="img/sys_icon.png">
+        <h2>系统消息</h2>
+        <p>一条系统消息</p>
+        <span class="last-message-time">12:38</span>
+      </ion-item>
+      <ion-item class="item-remove-animate item-avatar item-text-wrap" href="">
+        <img ng-src="img/event_icon.png">
+        <h2>活动消息</h2>
+        <p>一条活动消息</p>
+        <span class="last-message-time">昨天</span>
+      </ion-item>
+      <ion-item class="item-remove-animate item-avatar" ng-repeat="chat in chats" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">
+        <img ng-src="{{chat.face}}">
+        <h2>{{chat.name}}</h2>
+        <p>{{chat.lastText}}</p>
+        <span class="last-message-time">09:30</span>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

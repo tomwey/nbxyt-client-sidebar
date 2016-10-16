@@ -1,0 +1,28 @@
+<ion-view hide-tabs>
+  <ion-nav-title>{{organization.name}}</ion-nav-title>
+	<ion-content>
+		<div class="list card">
+			<div class="item item-image">
+				<img ng-src="{{organization.image}}">
+			</div>
+			<div class="item item-text-wrap">
+				<h2>{{organization.name}}</h2>
+				<p>创建时间：{{organization.founded_on}}</p>
+				<p>成员：{{organization.users_count}}</p>
+			</div>
+		</div>
+		<div class="list card">
+			<div class="item item-divider">
+				<h2>介绍</h2>
+			</div>
+			<div class="item item-text-wrap body-html" ng-bind-html="organization.body">
+				
+			</div>
+		</div>
+	</ion-content>
+	<ion-footer-bar class="bar-assertive">
+    	<div class="title" style="text-align: center; margin: 0 -10px; cursor: pointer;" ng-click="doRemoveOrganization(organization.id);">
+      		移除
+    	</div>
+	</ion-footer-bar>
+</ion-view>

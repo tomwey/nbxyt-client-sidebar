@@ -1,0 +1,57 @@
+<!--
+  This template loads for the 'tab.friend-detail' state (app.js)
+  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
+  The FriendsCtrl pulls data from the Friends service (service.js)
+  The Friends service returns an array of friend data
+-->
+<ion-view view-title="确认下单">
+  <ion-content>
+    <ion-list>
+    <!-- 收货人信息 -->
+      <ion-item class="item-remove-animate item item-icon-left item-icon-right">
+        <i class="icon ion-ios-location-outline"></i>
+        请选择收货地址
+        <i class="icon ion-chevron-right icon-accessory"></i>
+      </ion-item>
+      <ion-item class="item-divider"></ion-item>
+    <!-- 产品信息 -->
+      <ion-item class="item item-thumbnail-left item-text-wrap">
+        <img ng-src="{{product.image}}" alt="{{product.title}}">
+        <h2>{{product.title}}</h2>
+        <p>{{product.intro}}</p>
+        <p>{{product.price | currency}}</p>
+      </ion-item>
+    <!-- 购买数量 -->
+      <ion-item class="item-icon">
+        
+        <div class="row">
+          <div class="col col-50">
+            购买数量
+          </div>
+          <div class="col col-50" style="text-align:right;">
+            <i class="icon ion-ios-minus-outline"></i>
+            <span>1</span>
+            <i class="icon ion-ios-plus-outline"></i>
+          </div>
+        </div>
+        
+      </ion-item>
+    <!-- 订单备注 -->
+      <ion-item>
+        
+      </ion-item>
+      <ion-item class="item-divider"></ion-item>
+    <!-- 产品总价 -->
+      <ion-item></ion-item>
+    <!-- 运费 -->
+      <ion-item></ion-item>
+    <!-- 订单总价 -->
+      <ion-item></ion-item>
+    </ion-list>
+  </ion-content>
+    <ion-footer-bar class="bar-assertive">
+    <a ng-click="checkout();"><div class="title" style="text-align:center; margin: 0 -10px;">
+      提交订单
+    </div></a>
+  </ion-footer-bar>
+</ion-view>

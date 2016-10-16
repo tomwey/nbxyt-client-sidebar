@@ -1,0 +1,42 @@
+<!--
+  This template loads for the 'tab.friend-detail' state (app.js)
+  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
+  The FriendsCtrl pulls data from the Friends service (service.js)
+  The Friends service returns an array of friend data
+-->
+<ion-view view-title="基地详情">
+  <ion-content>
+    <div class="card list">
+      <div class="item item-image">
+        <img class="full-image" ng-src="{{company.image}}" alt="{{company.name}}">
+      </div>
+      <div class="item item-body item-text-wrap">
+        <h2>{{company.name}}</h2>
+        <p>{{company.intro}}</p>
+      </div>
+      <div class="item item-avatar item-text-wrap">
+        <img ng-src="{{company.user.avatar}}">
+        <h2>{{company.user.nickname}}</h2>
+        <p>{{company.user.specialty}}&nbsp;&nbsp;{{company.user.graduation}}</p>
+      </div>
+    </div>
+    <div class="list card">
+      <div class="item item-divider">简介</div>
+      <div class="item item-text-wrap item-image padding" ng-bind-html="company.body"></div>
+    </div>
+    
+		<!-- 校友组织活动 -->
+		<div class="card list" ng-show="isShowEvents">
+			<div class="item item-divider"><h2>最新活动</h2></div>
+			<ion-item class="item-remove-animate item item-thumbnail-left item-icon-right item-text-wrap" ng-repeat="event in company.latest_events" 
+				href="#/tab/events/{{event.id}}">
+				<img ng-src="{{event.image}}">
+    			<h3>{{event.title}}</h3>
+    			<p style="font-size: 12px;">活动时间：{{event.started_at}}</p>
+    			<i class="icon ion-chevron-right icon-accessory"></i>
+			</ion-item>
+			<a class="item item-divider" href="#/tab/events/PracticeBase-{{company.id}}" ng-show="isShowLoadMoreEvents"><h2>查看全部活动</h2></a>
+		</div>
+    
+  </ion-content>
+</ion-view>

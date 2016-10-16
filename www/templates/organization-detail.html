@@ -1,0 +1,52 @@
+<ion-view hide-tabs>
+  <ion-nav-title>{{organization.name}}</ion-nav-title>
+	<ion-content>
+		<div class="list card">
+			<div class="item item-image">
+				<img ng-src="{{organization.image}}">
+			</div>
+			<div class="item item-text-wrap">
+				<h2>{{organization.name}}</h2>
+				<p>创建时间：{{organization.founded_on}}</p>
+				<p>成员：{{organization.users_count}}</p>
+			</div>
+		</div>
+		<div class="list card">
+			<div class="item item-divider">
+				<h2>介绍</h2>
+			</div>
+			<div class="item item-text-wrap body-html" ng-bind-html="organization.body">
+				
+			</div>
+		</div>
+		
+		<!-- 校友组织活动 -->
+		<div class="card list" ng-show="isShowEvents">
+			<div class="item item-divider"><h2>最新活动</h2></div>
+			<ion-item class="item-remove-animate item item-thumbnail-left item-icon-right item-text-wrap" ng-repeat="event in organization.latest_events" 
+				href="#/app/events/{{event.id}}">
+				<img ng-src="{{event.image}}">
+    			<h2>{{event.title}}</h2>
+    			<p style="font-size: 12px;">活动时间：{{event.started_at}}</p>
+    			<i class="icon ion-chevron-right icon-accessory"></i>
+			</ion-item>
+			<a class="item item-divider" href="#/app/events-Organization-{{organization.id}}" ng-show="isShowLoadMoreEvents"><h2>查看全部活动</h2></a>
+		</div>
+		<!-- 组织成员 -->
+		<div class="card list" ng-show="isShowUsers">
+			<div class="item item-divider">最近加入成员</div>
+			<ion-item class="item-remove-animate item-avatar item-icon-right item-button-right" ng-repeat="obj in organization.latest_users" href="">
+        		<img ng-src="{{obj.avatar}}">
+        		<h2>{{obj.nickname}}</h2>
+        		<p>{{obj.specialty}}&nbsp;&nbsp;{{obj.graduation}}</p>
+        		<button class="button button-positive button-outline" style="font-size: 14px;">私信</button>
+      		</ion-item>
+			<a class="item item-divider" href="#/app/users/Club-{{organization.id}}" ng-show="isShowLoadMoreUsers"><h2>查看全部成员</h2></a>
+		</div>
+	</ion-content>
+  <ion-footer-bar ng-show="!has_joined" class="bar-assertive">
+    	<div class="title" style="text-align: center; margin: 0 -10px; cursor: pointer;" ng-click="doJoinOrganization(organization.id);">
+      		加入
+    	</div>
+	</ion-footer-bar>
+</ion-view>

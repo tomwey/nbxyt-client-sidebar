@@ -38,12 +38,22 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
 
 }])
 
-.run(function($ionicPlatform, $rootScope, $localStorage, UserService, $state) {
+.run(function($ionicPlatform, $rootScope, $ionicNativeTransitions, $localStorage, UserService, $state) {
 
   $rootScope.login = function(from) {
     // console.log('login');
     $rootScope.login_from = from;
+    console.log(from);
+
     $state.go('app.login');
+  };
+
+  $rootScope.popTo = function(state) {
+    $ionicNativeTransitions.stateGo(state, {},
+     { "type": "slide",
+       "direction": "right",
+       "duration": 200,
+     });
   };
   
   $ionicPlatform.ready(function() {

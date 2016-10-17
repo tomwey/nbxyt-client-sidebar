@@ -135,7 +135,7 @@ angular.module('xiaoyoutong.controllers', [])
 
     console.log(token);
     if (!token) {
-      $rootScope.login('app.organization');
+      $rootScope.login('app.home');
     } else {
       $ionicLoading.show();
       DataService.post('/relationships/organization/join', { token: token, id: $scope.organ_id }).then(function(resp){
@@ -241,7 +241,7 @@ angular.module('xiaoyoutong.controllers', [])
     $scope.club_id = id;
     var token = UserService.token();
     if (!token) {
-      $rootScope.login('app.club');
+      $rootScope.login('app.home');
     } else {
       $ionicLoading.show();
       DataService.post('/relationships/club/join', { token: token, id: $scope.club_id }).then(function(resp){
@@ -701,7 +701,7 @@ angular.module('xiaoyoutong.controllers', [])
   $scope.user = currentUser;
 
   if ($scope.user) {
-    $scope.updateUser = { nickname: '', mobile: $scope.user.mobile, new_mobile: '', code: '', password: '' };
+    $scope.updateUser = { nickname: $scope.user.nickname, mobile: $scope.user.mobile, new_mobile: '', code: '', password: '' };
   } else {
     $scope.updateUser = { nickname: '', mobile: '', new_mobile: '', code: '', password: '' };
   }

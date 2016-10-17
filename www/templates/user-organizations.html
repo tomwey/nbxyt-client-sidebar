@@ -1,7 +1,7 @@
 <ion-view view-title="校友组织">
 	<ion-content lazy-scroll>
 		<ion-list>
-			<ion-item class="item-remove-animate item item-thumbnail-left item-icon-right item-text-wrap" collection-repeat="organ in organizations" href="#/tab/user-organizations/{{organ.id}}">
+			<ion-item class="item-remove-animate item item-thumbnail-left item-icon-right item-text-wrap" collection-repeat="organ in organizations" href="#/app/organizations/{{organ.id}}">
         		<img image-lazy-src="{{organ.image}}">
         		<h2>{{organ.name}}</h2>
         		<p>{{organ.intro}}</p>

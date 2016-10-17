@@ -782,7 +782,7 @@ angular.module('xiaoyoutong.controllers', [])
     DataService.post('/user/update_nickname', { token: $scope.user.token, nickname: $scope.updateUser.nickname })
       .then(function(res) {
         if (res.data.code === 0) {
-          $state.go('app.user-profile');
+          $ionicHistory.goBack();
         } else {
           console.log(res.data.message);
         }
@@ -802,10 +802,10 @@ angular.module('xiaoyoutong.controllers', [])
         console.log($scope.updateUser);
 
     $ionicLoading.show();
-    DataService.post('/user/update_mobile', { token: $scope.user.token, mobile: $scope.updateUser.new_mobile })
+    DataService.post('/user/update_mobile', { token: $scope.user.token, mobile: $scope.updateUser.new_mobile, code: $scope.updateUser.code })
       .then(function(res) {
         if (res.data.code === 0) {
-          $state.go('app.user-profile');
+          $ionicHistory.goBack();
         } else {
           console.log(res.data.message);
         }
@@ -837,7 +837,7 @@ angular.module('xiaoyoutong.controllers', [])
     DataService.post('/user/update_password', params)
       .then(function(res) {
         if (res.data.code === 0) {
-          $state.go(toState);
+          $ionicHistory.goBack();
         } else {
           console.log(res.data.message);
         }
@@ -853,7 +853,7 @@ angular.module('xiaoyoutong.controllers', [])
     
     PopupService.ask('退出登录', '你确定吗？', function() {
       UserService.logout();
-      $state.go('app.setting');
+      $ionicHistory.goBack();
     })
 
   };

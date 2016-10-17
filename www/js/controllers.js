@@ -668,13 +668,13 @@ angular.module('xiaoyoutong.controllers', [])
 })
 
 // 我的
-.controller('UserCtrl', function($scope, $state, FormCheck, PopupService, DataService, $ionicLoading, UserService, AWToast) {
+.controller('UserCtrl', function($scope, $state, FormCheck, PopupService, DataService, $ionicLoading, UserService, AWToast, $cordovaCamera) {
   
   $scope.noReadonly = false;
 
   var currentUser = UserService.currentUser();
   // console.log('000');
-  // $scope.$on('$ionicView:beforeEnter', function(event, data) {
+  $scope.$on('$ionicView.beforeEnter', function(event, data) {
   //   console.log('11111');
     var token = null;
     if (currentUser) {
@@ -697,7 +697,8 @@ angular.module('xiaoyoutong.controllers', [])
         $ionicLoading.hide();
       });
     }
-
+  });
+  
   $scope.user = currentUser;
 
   if ($scope.user) {
@@ -734,6 +735,45 @@ angular.module('xiaoyoutong.controllers', [])
     });
   };
 
+  // 修改头像
+  $scope.changeAvatar = function() {
+    pickImage();
+  };
+  
+  var pickImage = function () {   
+    var options = {
+          quality: 50,
+          destinationType: Camera.DestinationType.DATA_URL,
+          sourceType: Camera.PictureSourceType.CAMERA,
+          allowEdit: true,
+          encodingType: Camera.EncodingType.JPEG,
+          targetWidth: 300,
+          targetHeight: 300,
+          popoverOptions: CameraPopoverOptions,
+          saveToPhotoAlbum: false,
+    	    correctOrientation:true
+        };
+
+        $cordovaCamera.getPicture(options).then(function(imageData) {
+          // var image = document.getElementById('myImage');
+//           image.src = "data:image/jpeg;base64," + imageData;
+          $scope.user.avatar = "data:image/jpeg;base64," + imageData;
+          // console.log(imageData);
+          $ionicLoading.show();
+          DataService.post('/user/update_base64_avatar', { token: UserService.token(), avatar: $scope.user.avatar })
+            .then(function(res) {
+              // console.log(res);
+            }, function(err) {
+              console.log(err);
+            }).finally(function() {
+              $ionicLoading.hide();
+            });
+        }, function(err) {
+          // error
+          console.log(err);
+        });
+  };
+  
   // 修改昵称
   $scope.doUpdateNickname = function() {
     console.log($scope.updateUser);
@@ -742,7 +782,7 @@ angular.module('xiaoyoutong.controllers', [])
     DataService.post('/user/update_nickname', { token: $scope.user.token, nickname: $scope.updateUser.nickname })
       .then(function(res) {
         if (res.data.code === 0) {
-          $state.go('app.user-profile');
+          $ionicHistory.goBack();
         } else {
           console.log(res.data.message);
         }
@@ -762,10 +802,10 @@ angular.module('xiaoyoutong.controllers', [])
         console.log($scope.updateUser);
 
     $ionicLoading.show();
-    DataService.post('/user/update_mobile', { token: $scope.user.token, mobile: $scope.updateUser.new_mobile })
+    DataService.post('/user/update_mobile', { token: $scope.user.token, mobile: $scope.updateUser.new_mobile, code: $scope.updateUser.code })
       .then(function(res) {
         if (res.data.code === 0) {
-          $state.go('app.user-profile');
+          $ionicHistory.goBack();
         } else {
           console.log(res.data.message);
         }
@@ -797,7 +837,7 @@ angular.module('xiaoyoutong.controllers', [])
     DataService.post('/user/update_password', params)
       .then(function(res) {
         if (res.data.code === 0) {
-          $state.go(toState);
+          $ionicHistory.goBack();
         } else {
           console.log(res.data.message);
         }
@@ -813,7 +853,7 @@ angular.module('xiaoyoutong.controllers', [])
     
     PopupService.ask('退出登录', '你确定吗？', function() {
       UserService.logout();
-      $state.go('app.setting');
+      $ionicHistory.goBack();
     })
 
   };
@@ -1008,7 +1048,7 @@ angular.module('xiaoyoutong.controllers', [])
 })
 
 // 登录
-.controller('LoginCtrl', function($scope, $state, $rootScope, DataService, $ionicLoading, FormCheck, UserService) {
+.controller('LoginCtrl', function($scope,$ionicHistory, $state, $rootScope, DataService, $ionicLoading, FormCheck, UserService) {
   $scope.user = {mobile: '', password: ''};
 
   $scope.doLogin = function() {
@@ -1023,7 +1063,8 @@ angular.module('xiaoyoutong.controllers', [])
     DataService.post('/account/login', $scope.user).then(function(res) {
       if (res.data.code === 0) {
         UserService.login(res.data.data);
-        $state.go($rootScope.login_from);
+        // $state.go($rootScope.login_from);
+        $ionicHistory.goBack();
       } else {
         console.log(res.data.message);
       }
@@ -1103,7 +1144,7 @@ angular.module('xiaoyoutong.controllers', [])
 })
 
 // 注册第二步
-.controller('SignupFinalCtrl', function($scope, $state, AWToast, FormCheck, DataService, $ionicLoading, $filter, $rootScope, UserService) {
+.controller('SignupFinalCtrl', function($scope, $state, $ionicHistory, AWToast, FormCheck, DataService, $ionicLoading, $filter, $rootScope, UserService) {
   $scope.user = {mobile: '', password: '', code: '', realname: '',
 stu_no: '', faculty_id: '', specialty_id: '', graduation_id: ''};
 
@@ -1163,7 +1204,8 @@ stu_no: '', faculty_id: '', specialty_id: '', graduation_id: ''};
       .then(function(res) {
         if (res.data.code === 0) {
           UserService.login(res.data.data);
-          $state.go($rootScope.login_from);
+          // $state.go($rootScope.login_from);
+          $ionicHistory.goBack(-2);
         } else {
           console.log(res.data.message);
         }

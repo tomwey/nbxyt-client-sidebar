@@ -674,7 +674,7 @@ angular.module('xiaoyoutong.controllers', [])
 
   var currentUser = UserService.currentUser();
   // console.log('000');
-  // $scope.$on('$ionicView:beforeEnter', function(event, data) {
+  $scope.$on('$ionicView.beforeEnter', function(event, data) {
   //   console.log('11111');
     var token = null;
     if (currentUser) {
@@ -697,7 +697,8 @@ angular.module('xiaoyoutong.controllers', [])
         $ionicLoading.hide();
       });
     }
-
+  });
+  
   $scope.user = currentUser;
 
   if ($scope.user) {
@@ -1008,7 +1009,7 @@ angular.module('xiaoyoutong.controllers', [])
 })
 
 // 登录
-.controller('LoginCtrl', function($scope, $state, $rootScope, DataService, $ionicLoading, FormCheck, UserService) {
+.controller('LoginCtrl', function($scope,$ionicHistory, $state, $rootScope, DataService, $ionicLoading, FormCheck, UserService) {
   $scope.user = {mobile: '', password: ''};
 
   $scope.doLogin = function() {
@@ -1023,7 +1024,8 @@ angular.module('xiaoyoutong.controllers', [])
     DataService.post('/account/login', $scope.user).then(function(res) {
       if (res.data.code === 0) {
         UserService.login(res.data.data);
-        $state.go($rootScope.login_from);
+        // $state.go($rootScope.login_from);
+        $ionicHistory.goBack();
       } else {
         console.log(res.data.message);
       }
@@ -1103,7 +1105,7 @@ angular.module('xiaoyoutong.controllers', [])
 })
 
 // 注册第二步
-.controller('SignupFinalCtrl', function($scope, $state, AWToast, FormCheck, DataService, $ionicLoading, $filter, $rootScope, UserService) {
+.controller('SignupFinalCtrl', function($scope, $state, $ionicHistory, AWToast, FormCheck, DataService, $ionicLoading, $filter, $rootScope, UserService) {
   $scope.user = {mobile: '', password: '', code: '', realname: '',
 stu_no: '', faculty_id: '', specialty_id: '', graduation_id: ''};
 
@@ -1163,7 +1165,8 @@ stu_no: '', faculty_id: '', specialty_id: '', graduation_id: ''};
       .then(function(res) {
         if (res.data.code === 0) {
           UserService.login(res.data.data);
-          $state.go($rootScope.login_from);
+          // $state.go($rootScope.login_from);
+          $ionicHistory.goBack(-2);
         } else {
           console.log(res.data.message);
         }

@@ -668,7 +668,7 @@ angular.module('xiaoyoutong.controllers', [])
 })
 
 // 我的
-.controller('UserCtrl', function($scope, $state, FormCheck, PopupService, DataService, $ionicLoading, UserService, AWToast, $cordovaCamera) {
+.controller('UserCtrl', function($scope,$ionicHistory, $state, FormCheck, PopupService, DataService, $ionicLoading, UserService, AWToast, $cordovaCamera) {
   
   $scope.noReadonly = false;
 

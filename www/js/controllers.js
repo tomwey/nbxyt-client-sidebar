@@ -668,7 +668,7 @@ angular.module('xiaoyoutong.controllers', [])
 })
 
 // 我的
-.controller('UserCtrl', function($scope, $state, FormCheck, PopupService, DataService, $ionicLoading, UserService, AWToast) {
+.controller('UserCtrl', function($scope, $state, FormCheck, PopupService, DataService, $ionicLoading, UserService, AWToast, $cordovaCamera) {
   
   $scope.noReadonly = false;
 
@@ -735,6 +735,45 @@ angular.module('xiaoyoutong.controllers', [])
     });
   };
 
+  // 修改头像
+  $scope.changeAvatar = function() {
+    pickImage();
+  };
+  
+  var pickImage = function () {   
+    var options = {
+          quality: 50,
+          destinationType: Camera.DestinationType.DATA_URL,
+          sourceType: Camera.PictureSourceType.CAMERA,
+          allowEdit: true,
+          encodingType: Camera.EncodingType.JPEG,
+          targetWidth: 300,
+          targetHeight: 300,
+          popoverOptions: CameraPopoverOptions,
+          saveToPhotoAlbum: false,
+    	    correctOrientation:true
+        };
+
+        $cordovaCamera.getPicture(options).then(function(imageData) {
+          // var image = document.getElementById('myImage');
+//           image.src = "data:image/jpeg;base64," + imageData;
+          $scope.user.avatar = "data:image/jpeg;base64," + imageData;
+          // console.log(imageData);
+          $ionicLoading.show();
+          DataService.post('/user/update_base64_avatar', { token: UserService.token(), avatar: $scope.user.avatar })
+            .then(function(res) {
+              // console.log(res);
+            }, function(err) {
+              console.log(err);
+            }).finally(function() {
+              $ionicLoading.hide();
+            });
+        }, function(err) {
+          // error
+          console.log(err);
+        });
+  };
+  
   // 修改昵称
   $scope.doUpdateNickname = function() {
     console.log($scope.updateUser);

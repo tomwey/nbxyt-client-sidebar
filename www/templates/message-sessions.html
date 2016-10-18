@@ -8,6 +8,14 @@
     		</div>
 		</div>
 
-		<ion-list ng-if="isLogined == true"></ion-list>
+		<ion-list ng-if="isLogined == true">
+			<ion-item class="item-remove-animate item-avatar item-icon-right item-button-right item-text-wrap" 
+			collection-repeat="ss in sessions" ng-click="gotoSendMessage(ss.user);">
+        <img ng-src="{{ss.user.avatar || 'img/default_avatar.png'}}">
+        <h2>{{ss.user.nickname || ss.user.hack_mobile}}</h2>
+        <p>{{ss.latest_message.content}}</p>
+        <button class="button button-clear button-stable">09:30</button>
+      </ion-item>
+		</ion-list>
 	</ion-content>
 </ion-view>

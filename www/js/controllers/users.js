@@ -9,8 +9,17 @@ angular.module('xiaoyoutong.controllers')
 .controller('UsersCtrl', function($scope, $rootScope, UserService, DataService, $ionicLoading, $stateParams, $timeout, AWToast, $state) {
   $scope.keyword = '';
 
+  var params = {};
+  if (UserService.token()) {
+  	params.token = UserService.token();
+  } 
+
+  if ($scope.keyword.length > 0) {
+  	params.q = $scope.keyword;
+  } 
+
   $ionicLoading.show();
-  DataService.get('/users', null).then(function(res) {
+  DataService.get('/users', params).then(function(res) {
     $scope.users = res.data.data;
   }, function(err) {
     $timeout(function() {

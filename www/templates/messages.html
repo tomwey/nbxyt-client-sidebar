@@ -5,18 +5,17 @@
     <!-- 我收到的消息 -->
       <div ng-if="message.is_from_me == false">              
           <img class="profile-pic left" 
-              ng-src="{{message.recipient.avatar}}" onerror="onProfilePicError(this)" />
+              ng-src="{{message.sender.avatar}}" onerror="onProfilePicError(this)" />
 
           <div class="chat-bubble left">
-
               <div class="message">
                 {{message.content}}
               </div>
 
               <div class="message-detail">
                   <span ng-click="viewProfile(message)" 
-                      class="bold">{{message.recipient.nickname || message.recipient.hack_mobile}}</span>,
-                  <!-- <span am-time-ago="message.time"></span> -->
+                      class="bold">{{message.sender.nickname || message.sender.hack_mobile}}</span>,
+                  <span am-time-ago="message.time"></span>
               </div>
 
           </div>
@@ -26,18 +25,18 @@
       <div ng-if="message.is_from_me == true">
         
           <img class="profile-pic right" 
-              ng-src="{{message.sender.avatar}}" onerror="onProfilePicError(this)" />
+              ng-src="{{message.sender.avatar || 'img/default_avatar.png'}}" onerror="onProfilePicError(this)" />
         
           <div class="chat-bubble right">
 
               <div class="message">
-                {{message.content0}}
+                {{message.content}}
               </div>
 
               <div class="message-detail">
                   <span ng-click="viewProfile(message)" 
                       class="bold">{{message.sender.nickname || message.sender.hack_mobile}}</span>, 
-                  <!-- <span am-time-ago="message.time"></span> -->
+                  <span am-time-ago="message.time"></span>
               </div>
 
           </div>

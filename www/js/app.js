@@ -555,3 +555,4 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
 });
 
 angular.module('xiaoyoutong.controllers', ['xiaoyoutong.services']);
+angular.module('xiaoyoutong.services', []);

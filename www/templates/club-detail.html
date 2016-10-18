@@ -1,6 +1,6 @@
 <ion-view hide-tabs>
   <ion-nav-title>{{club.name}}</ion-nav-title>
-	<ion-content ng-class="{'has-footer': !has_joined}">
+	<ion-content ng-class="{'has-footer': from_user || !has_joined}">
 		<div class="list card">
 			<div class="item item-image">
 				<img ng-src="{{club.image}}">
@@ -53,9 +53,9 @@
 			<a class="item item-divider" ng-click="gotoUsers({ type: 'Club', id: club.id });" ng-show="isShowLoadMoreUsers"><h2>查看全部成员</h2></a>
 		</div>
 	</ion-content>
-	<ion-footer-bar class="bar-assertive" ng-if="has_joined == false">
-    	<div class="title" style="text-align: center; margin: 0 -10px; cursor: pointer;" ng-click="doJoinClub(club.id);">
-      		加入
+	<ion-footer-bar class="bar-assertive" ng-if="from_user == true || has_joined == false">
+    	<div class="title" style="text-align: center; margin: 0 -10px; cursor: pointer;" ng-click="handleJoin(club.id);">
+      		{{from_user ? '移除' : '加入'}}
     	</div>
 	</ion-footer-bar>
 </ion-view>

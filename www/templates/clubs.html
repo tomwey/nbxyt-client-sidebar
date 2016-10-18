@@ -7,7 +7,7 @@
 <ion-view view-title="校友俱乐部">
   <ion-content>
   	<ion-list>
-		<ion-item class="item-remove-animate item item-thumbnail-left item-icon-right item-text-wrap" ng-repeat="club in clubs" href="#/app/clubs/{{club.id}}">
+		<ion-item class="item-remove-animate item item-thumbnail-left item-icon-right item-text-wrap" ng-repeat="club in clubs" ng-click="gotoClubDetail(club.id, false);">
     		<img ng-src="{{club.image}}">
     		<h2>{{club.name}}</h2>
     		<p>{{club.intro}}</p>

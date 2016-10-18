@@ -47,6 +47,8 @@ angular.module('xiaoyoutong.controllers')
 // 校友组织详情
 .controller('OrganizationDetailCtrl', function($scope, $stateParams, DataService, $ionicLoading, $ionicPopup, UserService, PopupService, $state, $rootScope, AWToast) {
 
+  $scope.from_user = $stateParams.from_user;
+  
   var loadData = function() {
     $scope.has_joined = false;
   
@@ -81,12 +83,15 @@ angular.module('xiaoyoutong.controllers')
     $ionicLoading.show();
     DataService.post('/relationships/organization/cancel_join', { token: UserService.token(), id: $scope.oid }).then(function(resp){
       if (resp.data.code == 0) {
-        $state.go('tab.user-organizations');
+        AWToast.showText('移除成功', 1500);
+        $state.go('app.user-organizations');
       } else {
-        PopupService.say('错误提示', resp.data.message);
+        // PopupService.say('错误提示', resp.data.message);
+        AWToast.showText(resp.data.message, 1500);
       }
     },function(err) {
-      PopupService.say('错误提示', '服务器出错');
+      // PopupService.say('错误提示', '服务器出错');
+      AWToast.showText('服务器出错', 1500);
     }).finally(function() {
       $ionicLoading.hide();
     });
@@ -119,7 +124,8 @@ angular.module('xiaoyoutong.controllers')
         }
       },function(err) {
         $scope.has_joined = false;
-        PopupService.say('错误提示', '服务器出错');
+        // PopupService.say('错误提示', '服务器出错');
+        AWToast.showText('服务器出错', 1500);
       }).finally(function() {
         $ionicLoading.hide();
       });
@@ -133,5 +139,13 @@ angular.module('xiaoyoutong.controllers')
     $scope.oid = id;
     
     PopupService.ask('从校友会移除', '你确定要从该校友会移除吗？', doRemove);
+  };
+
+  $scope.handleJoin = function(id) {
+    if ($scope.from_user) {
+      $scope.doRemoveOrganization(id);
+    } else {
+      $scope.doJoinOrganization(id);
+    }
   };
 })

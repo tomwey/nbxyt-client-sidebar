@@ -1,5 +1,5 @@
 angular.module('xiaoyoutong.services', [])
-.constant('apiHost', 'http://10.0.16.54:3000/api/v1')
+.constant('apiHost', 'http://xyt.deyiwifi.com/api/v1')
 .service('AccessKeyService', function($base64) {
   this.fromTimestamp = function(timestamp) {
     return $base64.encode('efd12eada3aa4976994546572c235cd8' + timestamp);

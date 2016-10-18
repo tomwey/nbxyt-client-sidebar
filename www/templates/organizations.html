@@ -8,7 +8,7 @@
         		<p>成员：{{organization.users_count}}</p>
         		<i class="icon ion-chevron-right icon-accessory"></i>
 			</ion-item>
-			<ion-item class="item-remove-animate item item-thumbnail-left item-icon-right item-text-wrap" collection-repeat="organ in organizations" href="#/app/organizations/{{organ.id}}">
+			<ion-item class="item-remove-animate item item-thumbnail-left item-icon-right item-text-wrap" collection-repeat="organ in organizations" ng-click="gotoOrganizationDetail(organ.id, false);">
         		<img image-lazy-src="{{organ.image}}">
         		<h2>{{organ.name}}</h2>
         		<p>{{organ.intro}}</p>

@@ -62,6 +62,7 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
     }
   };
 
+  // 发消息页面
   $rootScope.gotoSendMessage = function(to) {
     if ( !UserService.currentUser() ) {
       $state.go('app.login');
@@ -70,8 +71,19 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
     }
   };
 
+  // 同学录列表页面
   $rootScope.gotoUsers = function(owner) {
     $state.go('app.users', { owner: owner });
+  };
+
+  // 校友详情页面
+  $rootScope.gotoOrganizationDetail = function(oid, from_user) {
+    $state.go('app.organization', { id: oid, from_user: from_user });
+  };
+
+  // 俱乐部详情页面
+  $rootScope.gotoClubDetail = function(cid, from_user) {
+    $state.go('app.club', { id: cid, from_user: from_user });
   };
   
   $ionicPlatform.ready(function() {
@@ -135,7 +147,11 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
 
     // 校友会详情
     .state('app.organization', {
-      url: '/organizations/:id',
+      url: '/organization',
+      params: {
+        id: null,
+        from_user: false,
+      },
       views: {
         'mainContent': {
          templateUrl: 'templates/organization-detail.html',
@@ -193,7 +209,11 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
 
     // 俱乐部详情
     .state('app.club', {
-      url: '/clubs/:id',
+      url: '/club',
+      params: {
+        id: null,
+        from_user: false,
+      },
       views: {
         'mainContent': {
          templateUrl: 'templates/club-detail.html',

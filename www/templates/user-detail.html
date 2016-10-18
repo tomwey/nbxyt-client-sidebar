@@ -1,0 +1,28 @@
+<ion-view>
+	<ion-nav-title>{{user.nickname || user.hack_mobile}}的信息</ion-nav-title>
+	<ion-content>
+		<div class="card list">
+			<div class="item item-divider">基本信息</div>
+			<div class="item item-avatar item-icon-right item-button-right">
+				<img ng-src="{{user.avatar || 'img/default_avatar.png'}}">
+				<h2>{{user.nickname || user.hack_mobile}}</h2>
+				<p>{{user.specialty}} {{user.graduation}}</p>
+				<button class="button button-positive button-outline" style="font-size: 14px;" ng-click="gotoSendMessage(user.uid);">私信</button>
+			</div>
+			
+		</div>
+		<div class="card list">
+			<div class="item item-divider">详细信息</div>
+			<div class="item">
+				<p>姓名：{{user.realname}}</p>
+				<p>手机：{{user.hack_mobile}}</p>
+				<p ng-if="user.stu_no != ''">学号：{{user.stu_no}}</p>
+				<p>院系：{{user.faculty}}</p>
+				<p>专业：{{user.specialty}}</p>
+				<p>班级：{{user.graduation}}</p>
+				<p ng-if="user.created_at && user.created_at != ''">注册：{{user.created_at}}</p>
+			</div>
+		</div>
+		
+	</ion-content>
+</ion-view>

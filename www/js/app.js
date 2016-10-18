@@ -90,7 +90,7 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
     url: '/app',
     abstract: true,
     templateUrl: 'templates/sidebar.html',
-    controller: 'AppCtrl',
+    // controller: 'AppCtrl',
   })
 
   // 首页
@@ -148,7 +148,7 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
 
     // 校友详情
     .state('app.user', {
-      url: '/user',
+      url: '/users/:uid',
       views: {
         'mainContent': {
          templateUrl: 'templates/user-detail.html',
@@ -311,6 +311,17 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
     }
   })
 
+  // 消息会话列表
+  .state('app.message-sessions', {
+    url: '/message-sessions',
+    views: {
+      'mainContent': {
+       templateUrl: 'templates/message-sessions.html',
+       controller:  'MessagesCtrl',
+      }
+    }
+  })
+
   // 我的
   .state('app.setting', {
     url: '/setting',
@@ -446,3 +457,5 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
   $urlRouterProvider.otherwise('/app/home');
 
 });
+
+angular.module('xiaoyoutong.controllers', ['xiaoyoutong.services']);

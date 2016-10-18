@@ -187,3 +187,11 @@ img.profile-pic.right {
 .cf {
   clear: both !important;
 }
+
+.timeago {
+	position: absolute;
+	right: 15px;
+	top: 15px;
+	color: rgb(137,137,137);
+	font-size: 14px
+}

@@ -9,12 +9,12 @@
 		</div>
 
 		<ion-list ng-if="isLogined == true">
-			<ion-item class="item-remove-animate item-avatar item-icon-right item-button-right item-text-wrap" 
+			<ion-item class="item-remove-animate item-avatar item-text-wrap" 
 			collection-repeat="ss in sessions" ng-click="gotoSendMessage(ss.user);">
         <img ng-src="{{ss.user.avatar || 'img/default_avatar.png'}}">
         <h2>{{ss.user.nickname || ss.user.hack_mobile}}</h2>
         <p>{{ss.latest_message.content}}</p>
-        <button class="button button-clear button-stable">09:30</button>
+        <span am-time-ago="ss.latest_message.time" class="timeago"></span>
       </ion-item>
 		</ion-list>
 	</ion-content>

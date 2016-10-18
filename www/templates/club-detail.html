@@ -48,7 +48,7 @@
         		<img ng-src="{{obj.avatar}}">
         		<h2>{{obj.nickname}}</h2>
         		<p>{{obj.specialty}}&nbsp;&nbsp;{{obj.graduation}}</p>
-        		<button class="button button-positive button-outline" style="font-size: 14px;" ng-click="gotoSendMessage(obj.uid);">私信</button>
+        		<button class="button button-positive button-outline" style="font-size: 14px;" ng-click="gotoSendMessage(obj);$event.stopPropagation();">私信</button>
       		</ion-item>
 			<a class="item item-divider" href="#/app/users-Club" ng-show="isShowLoadMoreUsers"><h2>查看全部成员</h2></a>
 		</div>

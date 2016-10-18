@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "angular-timeago": "^0.4.3",
-    "ionic-image-lazy-load": "ion-image-lazy-load#*"
+    "ionic-image-lazy-load": "ion-image-lazy-load#*",
+    "angular-moment": "^1.0.0"
   }
 }

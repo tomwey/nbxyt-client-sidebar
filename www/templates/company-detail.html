@@ -14,10 +14,11 @@
         <h2>{{company.name}}</h2>
         <p>{{company.intro}}</p>
       </div>
-      <div class="item item-avatar item-text-wrap">
+      <div class="item item-avatar item-text-wrap item-icon-right" ng-click="gotoUserDetail(company.user.uid);">
         <img ng-src="{{company.user.avatar}}">
         <h2>{{company.user.nickname}}</h2>
         <p>{{company.user.specialty}}&nbsp;&nbsp;{{company.user.graduation}}</p>
+        <i class="icon ion-chevron-right icon-accessory"></i>
       </div>
     </div>
     <div class="list card">

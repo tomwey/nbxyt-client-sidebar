@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.services', 'ui.router', 'base64', 'ionicLazyLoad', 'ngCordova', 'ionic-native-transitions'])
+angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.services', 'ui.router', 'base64', 'ionicLazyLoad', 'ngCordova', 'ionic-native-transitions', 'angularMoment'])
 
 .config(['$ionicConfigProvider', '$ionicNativeTransitionsProvider', function($ionicConfigProvider, $ionicNativeTransitionsProvider){
   $ionicConfigProvider.tabs.position('bottom');
@@ -38,7 +38,9 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
 
 }])
 
-.run(function($ionicPlatform, $rootScope, $ionicNativeTransitions, $localStorage, UserService, $state) {
+.run(function($ionicPlatform, $rootScope, $ionicNativeTransitions, $localStorage, UserService, $state, amMoment) {
+
+  amMoment.changeLocale('zh-cn');
 
   $rootScope.login = function() {
     $state.go('app.login');

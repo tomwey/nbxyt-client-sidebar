@@ -66,6 +66,7 @@ angular.module('xiaoyoutong.controllers')
 		DataService.post('/messages/send', $scope.message)
 			.then(function(res) {
 				if (res.data.code == 0) {
+					$scope.message.content = '';
 					$scope.messages.push(res.data.data);
 				} else {
 					AWToast.showText(res.data.message, 1500);

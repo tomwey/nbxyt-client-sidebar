@@ -6,7 +6,9 @@
     </ion-refresher>
     <ion-slide-box auto-play="true" does-continue="true" show-pager="true" id="detail-slide-box" delegate-handle="slideimgs">
       <ion-slide ng-repeat="banner in banners">
-          <a class="item item-image" href="#/app/{{banner.bannerable_type}}s/{{banner.bannerable_id}}"><img image-lazy-src="{{banner.image}}" alt="" class="banner-image"></a>
+          <a class="item item-image" ng-click="gotoBannerDetail(banner);">
+          <!-- href="#/app/{{banner.bannerable_type}}s/{{banner.bannerable_id}}" -->
+          <img image-lazy-src="{{banner.image}}" alt="" class="banner-image"></a>
       </ion-slide>           
     </ion-slide-box>
 

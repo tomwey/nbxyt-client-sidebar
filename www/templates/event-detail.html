@@ -6,15 +6,15 @@
 -->
 <ion-view view-title="活动详情" hide-tabs>
   <!-- <ion-nav-title>{{club.name}}</ion-nav-title> -->
-  <ion-content>
+  <ion-content ng-class="{'has-footer': (event.eventable_type !== 'Organization' || from_user || !has_attended)}">
     <div class="card list">
       <div class="item item-image">
         <img ng-src="{{event.image}}">
       </div>
       <div class="item item-text-wrap">
         <h2>{{event.title}}</h2>
-        <p>开始时间：{{event.started_at}}</p>
-        <p>结束时间：{{event.ended_at}}</p>
+        <p>{{event.started_at | amDateFormat:'YYYY-MM-DD HH:mm'}} 开始</p>
+        <p>{{event.ended_at | amDateFormat:'YYYY-MM-DD HH:mm'}} 结束</p>
         <p ng-if="event.eventable_type != 'Organization'">参加人数：{{event.joined_count}} / {{event.needed_count}}</p>
       </div>
       <div class="item item-avatar item-text-wrap">
@@ -29,9 +29,9 @@
       </div>
     </div>
   </ion-content>
-  <ion-footer-bar class="bar-{{ can_attend ? 'assertive' : 'energized' }}" >
-      <div class="title" style="text-align: center; margin: 0 -10px; cursor: pointer;" ng-click="doAttend(event.id);">
-          {{event.state.label}}
+  <ion-footer-bar ng-if="event.eventable_type !== 'Organization' || from_user || has_attended == false" ng-class="{'bar-assertive': from_user || can_attend,'bar-dark': !from_user && !can_attend}">
+      <div class="title" style="text-align: center; margin: 0 -10px; cursor: pointer;" ng-click="handleAttend(event.id);">
+          {{from_user ? '移除' : event.state.label}}
       </div>
   </ion-footer-bar>
 </ion-view>

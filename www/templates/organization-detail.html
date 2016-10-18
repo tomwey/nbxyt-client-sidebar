@@ -24,7 +24,7 @@
 		<div class="card list" ng-show="isShowEvents">
 			<div class="item item-divider"><h2>最新活动</h2></div>
 			<ion-item class="item-remove-animate item item-thumbnail-left item-icon-right item-text-wrap" ng-repeat="event in organization.latest_events" 
-				href="#/app/events/{{event.id}}">
+				ng-click="gotoEventDetail(event.id, false);">
 				<img ng-src="{{event.image}}">
     			<h2>{{event.title}}</h2>
     			<p style="font-size: 12px;">活动时间：{{event.started_at}}</p>

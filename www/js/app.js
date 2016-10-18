@@ -38,7 +38,7 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
 
 }])
 
-.run(function($ionicPlatform, $rootScope, $ionicNativeTransitions, $localStorage, UserService, $state, amMoment) {
+.run(function($ionicPlatform, $location, $rootScope, $ionicNativeTransitions, $localStorage, UserService, $state, amMoment) {
 
   amMoment.changeLocale('zh-cn');
 
@@ -59,6 +59,15 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
       $state.go('app.login');
     } else {
       $state.go('app.user', { uid: uid });
+    }
+  };
+
+  $rootScope.gotoBannerDetail = function(banner) {
+    if (banner.bannerable_type === 'event') {
+      $rootScope.gotoEventDetail(banner.bannerable_id, false);
+    } else {
+      // $location.url('#/app/' + banner.bannerable_type + 's/' + banner.bannerable_id);
+      $state.go('app.article', { id: banner.bannerable_id} )
     }
   };
 
@@ -84,6 +93,11 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
   // 俱乐部详情页面
   $rootScope.gotoClubDetail = function(cid, from_user) {
     $state.go('app.club', { id: cid, from_user: from_user });
+  };
+
+  // 活动详情页面
+  $rootScope.gotoEventDetail = function(eid, from_user) {
+    $state.go('app.event', { id: eid, from_user: from_user });
   };
   
   $ionicPlatform.ready(function() {
@@ -343,7 +357,11 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
     })
     // 活动详情
     .state('app.event', {
-      url: '/events/:id',
+      url: '/event',
+      params: {
+        id: null,
+        from_user: false,
+      },
       views: {
         'mainContent': {
           templateUrl: 'templates/event-detail.html',

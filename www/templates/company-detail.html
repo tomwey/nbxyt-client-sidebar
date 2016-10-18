@@ -30,13 +30,14 @@
 		<div class="card list" ng-show="isShowEvents">
 			<div class="item item-divider"><h2>最新活动</h2></div>
 			<ion-item class="item-remove-animate item item-thumbnail-left item-icon-right item-text-wrap" ng-repeat="event in company.latest_events" 
-				href="#/app/events/{{event.id}}">
+				ng-click="gotoEventDetail(event.id, false);">
 				<img ng-src="{{event.image}}">
     			<h3>{{event.title}}</h3>
-    			<p style="font-size: 12px;">活动时间：{{event.started_at}}</p>
+    			<p style="font-size: 12px;">{{event.started_at | amDateFormat:'YYYY-MM-DD HH:mm'}} 开始</p>
+          <p style="font-size: 12px;">{{event.ended_at | amDateFormat:'YYYY-MM-DD HH:mm'}} 结束</p>
     			<i class="icon ion-chevron-right icon-accessory"></i>
 			</ion-item>
-			<a class="item item-divider" href="#/tab/events/PracticeBase-{{company.id}}" ng-show="isShowLoadMoreEvents"><h2>查看全部活动</h2></a>
+			<a class="item item-divider" href="#/app/events/PracticeBase-{{company.id}}" ng-show="isShowLoadMoreEvents"><h2>查看全部活动</h2></a>
 		</div>
     
   </ion-content>

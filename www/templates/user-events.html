@@ -8,7 +8,7 @@
   <ion-content>
   	<ion-list>
   		<ion-item class="item-remove-animate item item-thumbnail-left item-icon-right item-text-wrap" collection-repeat="event in events" 
-				href="#/tab/user-events/{{event.id}}">
+				ng-click="gotoEventDetail(event.id, true);">
 			<img ng-src="{{event.image}}">
 			<h2>{{event.title}}</h2>
       <p style="margin: 5px 0; font-weight: bold; color: rgb(85,85,85)">{{event.owner.name}}</p>

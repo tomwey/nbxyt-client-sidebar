@@ -35,23 +35,32 @@
 })
 
 // 活动详情
-.controller('EventDetailCtrl', function($scope, $stateParams, DataService, $ionicLoading, PopupService, UserService, $state, $rootScope) {
+.controller('EventDetailCtrl', function($scope, $stateParams, DataService, $ionicLoading, PopupService, UserService, $state, $rootScope, AWToast) {
   
   $scope.has_attended = false;
   $scope.can_attend   = true;
+
+  $scope.from_user = $stateParams.from_user;
   
-  $ionicLoading.show()
-  $scope.event = DataService.get('/events/' + parseInt($stateParams.id), {token: UserService.token()}).then(function(response){
-    $scope.event = response.data.data;
-    $ionicLoading.hide();
-    
-    $scope.has_attended = $scope.event.has_attended;
-    $scope.can_attend   = $scope.event.state.can_attend;
-    
-  },function(err) {
-    $scope.can_attend = false;
-    console.log(err);
-    $ionicLoading.hide();
+  $scope.$on('$ionicView.beforeEnter', function(event, data) {
+    $ionicLoading.show()
+
+    $scope.event = DataService.get('/events/' + parseInt($stateParams.id), {token: UserService.token()}).then(function(res){
+
+      if (res.data.code === 0) {
+        $scope.event = res.data.data;
+        $scope.has_attended = $scope.event.has_attended;
+        $scope.can_attend   = $scope.event.state.can_attend;
+      } else {
+        $scope.can_attend = false;
+        AWToast.showText(res.data.message, 1500);
+      }
+    },function(err) {
+      $scope.can_attend = false;
+      AWToast.showText('服务器出错', 1500);
+    }).finally(function() {
+      $ionicLoading.hide();
+    });
   });
 
   // 报名参加
@@ -72,15 +81,18 @@
     } else {
       $ionicLoading.show();
       DataService.post('/attends', { token: UserService.token(), event_id: $scope.event_id }).then(function(resp){
-        if (resp.data.code == 0) {
+        if (resp.data.code === 0) {
           $scope.has_attended = true;
+          AWToast.showText('报名成功', 1500);
         } else {
           $scope.has_attended = false;
-          PopupService.say('错误提示', resp.data.message);
+          // PopupService.say('错误提示', resp.data.message);
+          AWToast.showText(resp.data.message, 1500);
         }
       },function(err) {
         $scope.has_attended = false;
-        PopupService.say('错误提示', '服务器出错');
+        // PopupService.say('错误提示', '服务器出错');
+        AWToast.showText('服务器出错', 1500);
       }).finally(function() {
         $ionicLoading.hide();
       });
@@ -91,12 +103,15 @@
     $ionicLoading.show();
     DataService.post('/attends/delete', { token: UserService.token(), event_id: $scope.oid }).then(function(resp){
       if (resp.data.code == 0) {
-        $state.go('tab.user-events');
+        AWToast.showText('移除成功', 1500);
+        $state.go('app.user-events');
       } else {
-        PopupService.say('错误提示', resp.data.message);
+        // PopupService.say('错误提示', resp.data.message);
+        AWToast.showText(resp.data.message, 1500);
       }
     },function(err) {
-      PopupService.say('错误提示', '服务器出错');
+      // PopupService.say('错误提示', '服务器出错');
+      AWToast.showText('服务器出错', 1500);
     }).finally(function() {
       $ionicLoading.hide();
     });
@@ -108,5 +123,13 @@
     $scope.oid = id;
     
     PopupService.ask('取消报名', '你确定要取消参加该活动吗？', doRemove);
+  };
+
+  $scope.handleAttend = function(id) {
+    if ($scope.from_user) {
+      $scope.cancelAttend(id);
+    } else {
+      $scope.doAttend(id);
+    }
   };
 })

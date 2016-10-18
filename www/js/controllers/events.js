@@ -68,7 +68,7 @@
     $scope.event_id = id;
     var token = UserService.token();
     if (!token) {
-      $rootScope.login('app.event');
+      $rootScope.login();
     } else {
       $ionicLoading.show();
       DataService.post('/attends', { token: UserService.token(), event_id: $scope.event_id }).then(function(resp){

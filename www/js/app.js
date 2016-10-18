@@ -40,11 +40,7 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
 
 .run(function($ionicPlatform, $rootScope, $ionicNativeTransitions, $localStorage, UserService, $state) {
 
-  $rootScope.login = function(from) {
-    // console.log('login');
-    $rootScope.login_from = from;
-    console.log(from);
-
+  $rootScope.login = function() {
     $state.go('app.login');
   };
 
@@ -54,6 +50,22 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
        "direction": "right",
        "duration": 200,
      });
+  };
+
+  $rootScope.gotoUserDetail = function(uid) {
+    if ( !UserService.currentUser() ) {
+      $state.go('app.login');
+    } else {
+      $state.go('app.user', { uid: uid });
+    }
+  };
+
+  $rootScope.gotoSendMessage = function(to) {
+    if ( !UserService.currentUser() ) {
+      $state.go('app.login');
+    } else {
+      $state.go('app.messages', { to: to });
+    }
   };
   
   $ionicPlatform.ready(function() {
@@ -114,6 +126,8 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
         }
       }
     })
+
+    // 校友会详情
     .state('app.organization', {
       url: '/organizations/:id',
       views: {
@@ -303,6 +317,9 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
   // 消息
   .state('app.messages', {
     url: '/messages',
+    params: {
+      to: null
+    },
     views: {
       'mainContent': {
         templateUrl: 'templates/messages.html',
@@ -317,7 +334,7 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
     views: {
       'mainContent': {
        templateUrl: 'templates/message-sessions.html',
-       controller:  'MessagesCtrl',
+       controller:  'MessageSessionsCtrl',
       }
     }
   })
@@ -408,6 +425,28 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
     }
   })
 
+  // 意见反馈
+  .state('app.feedback', {
+    url: '/feedback',
+    views: {
+      'mainContent': {
+        templateUrl: 'templates/feedback.html',
+        controller:  'FeedbackCtrl',
+      }
+    }
+  })
+
+  // 关于
+  .state('app.aboutus', {
+    url: '/aboutus',
+    views: {
+      'mainContent': {
+        templateUrl: 'templates/aboutus.html',
+        controller:  'AboutusCtrl',
+      }
+    }
+  })
+
 /////////////////////////////////////////////////////////////////////////////
   // 登录
   .state('app.login', {
@@ -453,7 +492,6 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
     }
   })
 
-  // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/home');
 
 });

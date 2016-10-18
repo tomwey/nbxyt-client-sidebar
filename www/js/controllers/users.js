@@ -19,22 +19,6 @@ angular.module('xiaoyoutong.controllers')
   }).finally(function() {
     $ionicLoading.hide();
   });
-
-  $scope.gotoUserDetail = function(uid) {
-    if ( !UserService.currentUser() ) {
-      $state.go('app.login');
-    } else {
-      $state.go('app.user', { uid: uid });
-    }
-  };
-
-  $scope.gotoSendMessage = function(uid) {
-    if ( !UserService.currentUser() ) {
-      $state.go('app.login');
-    } else {
-      $state.go('app.messages', { uid: uid });
-    }
-  };
 })
 
 // 校友详情
@@ -60,11 +44,4 @@ angular.module('xiaoyoutong.controllers')
 			$ionicLoading.hide();
 		});
 
-	$scope.gotoSendMessage = function(uid) {
-    if ( !UserService.currentUser() ) {
-      $state.go('app.login');
-    } else {
-      $state.go('app.messages', { uid: uid });
-    }
-  };
 })

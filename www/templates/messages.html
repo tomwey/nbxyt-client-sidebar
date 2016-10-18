@@ -1,24 +1,59 @@
-<ion-view view-title="消息详情">
-  <ion-content>
-    <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-text-wrap" href="">
-        <img ng-src="img/sys_icon.png">
-        <h2>系统消息</h2>
-        <p>一条系统消息</p>
-        <span class="last-message-time">12:38</span>
-      </ion-item>
-      <ion-item class="item-remove-animate item-avatar item-text-wrap" href="">
-        <img ng-src="img/event_icon.png">
-        <h2>活动消息</h2>
-        <p>一条活动消息</p>
-        <span class="last-message-time">昨天</span>
-      </ion-item>
-      <ion-item class="item-remove-animate item-avatar" ng-repeat="chat in chats" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">
-        <img ng-src="{{chat.face}}">
-        <h2>{{chat.name}}</h2>
-        <p>{{chat.lastText}}</p>
-        <span class="last-message-time">09:30</span>
-      </ion-item>
-    </ion-list>
+<ion-view view-title="发消息给{{to_user.nickname || to_user.hack_mobile}}">
+  <ion-content has-bouncing="true" delegate-handle="userMessageScroll">
+    <div ng-repeat="message in messages" class="message-wrapper">
+
+    <!-- 我收到的消息 -->
+      <div ng-if="message.is_from_me == false">              
+          <img class="profile-pic left" 
+              ng-src="{{message.recipient.avatar}}" onerror="onProfilePicError(this)" />
+
+          <div class="chat-bubble left">
+
+              <div class="message">
+                {{message.content}}
+              </div>
+
+              <div class="message-detail">
+                  <span ng-click="viewProfile(message)" 
+                      class="bold">{{message.recipient.nickname || message.recipient.hack_mobile}}</span>,
+                  <!-- <span am-time-ago="message.time"></span> -->
+              </div>
+
+          </div>
+      </div>
+      
+      <!-- 我发送的消息 -->
+      <div ng-if="message.is_from_me == true">
+        
+          <img class="profile-pic right" 
+              ng-src="{{message.sender.avatar}}" onerror="onProfilePicError(this)" />
+        
+          <div class="chat-bubble right">
+
+              <div class="message">
+                {{message.content0}}
+              </div>
+
+              <div class="message-detail">
+                  <span ng-click="viewProfile(message)" 
+                      class="bold">{{message.sender.nickname || message.sender.hack_mobile}}</span>, 
+                  <!-- <span am-time-ago="message.time"></span> -->
+              </div>
+
+          </div>
+        
+      </div>
+
+      <div class="cf"></div>
+    </div>
+
   </ion-content>
+  <ion-footer-bar class="bar-light send-message" keyboard-attach>
+    <label class="item-input-wrapper">
+      <input type="text" ng-model="message.content">
+    </label>
+    <button class="button button-small button-clear button-positive" ng-click="sendMessage();" ng-class="{'disabled': message.content == ''}">
+      提交
+    </button>
+  </ion-footer-bar>
 </ion-view>

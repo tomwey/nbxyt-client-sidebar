@@ -1,3 +1,13 @@
 <ion-view view-title="消息">
-	<ion-content></ion-content>
+	<ion-content>
+		<div class="row" ng-if="isLogined == false">
+    		<div class="col">
+        		<div class="text-center" style="margin-top: 50%;">
+            		<button class="button button-assertive" ng-click="login();">登录 / 注册</button>
+        		</div>
+    		</div>
+		</div>
+
+		<ion-list ng-if="isLogined == true"></ion-list>
+	</ion-content>
 </ion-view>

@@ -51,7 +51,7 @@
     $scope.club_id = id;
     var token = UserService.token();
     if (!token) {
-      $rootScope.login('app.home');
+      $rootScope.login();
     } else {
       $ionicLoading.show();
       DataService.post('/relationships/club/join', { token: token, id: $scope.club_id }).then(function(resp){

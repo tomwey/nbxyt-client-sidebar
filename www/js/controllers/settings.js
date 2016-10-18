@@ -24,7 +24,7 @@ angular.module('xiaoyoutong.controllers')
     var token = UserService.token();
     
     if (!token) {
-      $rootScope.login('app.setting');
+      $rootScope.login();
     } else {
       $state.go(state);
     }

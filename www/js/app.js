@@ -69,6 +69,10 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
       $state.go('app.messages', { to: to });
     }
   };
+
+  $rootScope.gotoUsers = function(owner) {
+    $state.go('app.users', { owner: owner });
+  };
   
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -154,6 +158,9 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
     // 同学录
     .state('app.users', {
       url: '/users',
+      params: {
+        owner: null
+      },
       views: {
         'mainContent': {
          templateUrl: 'templates/users.html',
@@ -191,6 +198,17 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
         'mainContent': {
          templateUrl: 'templates/club-detail.html',
           controller:  'ClubDetailCtrl',
+        }
+      }
+    })
+
+    // 俱乐部章程
+    .state('app.club-bylaw', {
+      url: '/clubs/:id/bylaw',
+      views: {
+        'mainContent': {
+          templateUrl: 'templates/club-bylaw.html',
+          controller: 'ClubDetailCtrl'
         }
       }
     })

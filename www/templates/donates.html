@@ -7,8 +7,8 @@
 <ion-view view-title="捐赠列表">
 	<ion-content>
 		<ion-list>
-			<ion-item class="item-remove-animate item item-thumbnail-left item-icon-right item-text-wrap" ng-repeat="donate in donates"
-			href="#/tab/donates/{{donate.id}}">
+			<ion-item class="item-remove-animate item item-thumbnail-left item-icon-right item-text-wrap" collection-repeat="donate in donates"
+			href="#/app/donates/{{donate.id}}">
 				<img ng-src="{{donate.image}}">
 				<h2>{{donate.title}}</h2>
 				<p>{{donate.intro}}</p>

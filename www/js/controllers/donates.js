@@ -136,7 +136,7 @@
 })
 
 // 捐赠申请
-.controller('DonateApplyCtrl', function($scope, DataService, $ionicLoading, $cordovaToast) {
+.controller('DonateApplyCtrl', function($scope, DataService, $ionicLoading, AWToast) {
   $scope.donate_apply = { content: '', contact: '' };
   
   $scope.commitApply = function() {
@@ -154,11 +154,18 @@
     }
     
     $ionicLoading.show();
-    DataService.post('/donates/apply', $scope.donate_apply).then(function(response) {
-      console.log(response.data);
-      $scope.donate_apply = { content: '', contact: '' };
+    DataService.post('/donates/apply', $scope.donate_apply).then(function(res) {
+      // console.log(response.data);
+      if (res.data.code === 0) {
+        AWToast.showText('提交成功', 1500);
+        $scope.donate_apply = { content: '', contact: '' };
+      } else {
+        AWToast.showText(res.data.message, 1500);
+      }
+      
     }, function(err) {
-      console.log(err);
+      // console.log(err);
+      AWToast.showText('服务器出错', 1500);
     }).finally(function() {
       $ionicLoading.hide();
     });

@@ -1,6 +1,6 @@
 <ion-view hide-tabs>
   <ion-nav-title>{{organization.name}}</ion-nav-title>
-	<ion-content>
+	<ion-content ng-class="{'has-footer': !has_joined}">
 		<div class="list card">
 			<div class="item item-image">
 				<img ng-src="{{organization.image}}">
@@ -36,15 +36,15 @@
 		<div class="card list" ng-show="isShowUsers">
 			<div class="item item-divider">最近加入成员</div>
 			<ion-item class="item-remove-animate item-avatar item-icon-right item-button-right" ng-repeat="obj in organization.latest_users" ng-click="gotoUserDetail(obj.uid);">
-        		<img ng-src="{{obj.avatar}}">
+        		<img ng-src="{{obj.avatar || 'img/default_avatar.png'}}">
         		<h2>{{obj.nickname}}</h2>
         		<p>{{obj.specialty}}&nbsp;&nbsp;{{obj.graduation}}</p>
         		<button class="button button-positive button-outline" style="font-size: 14px;" ng-click="gotoSendMessage(obj);$event.stopPropagation();">私信</button>
       		</ion-item>
-			<a class="item item-divider" href="#/app/users/Club-{{organization.id}}" ng-show="isShowLoadMoreUsers"><h2>查看全部成员</h2></a>
+			<a class="item item-divider" ng-click="gotoUsers({ type: 'Organization', id: organization.id });" ng-show="isShowLoadMoreUsers"><h2>查看全部成员</h2></a>
 		</div>
 	</ion-content>
-  <ion-footer-bar ng-show="!has_joined" class="bar-assertive">
+  <ion-footer-bar ng-if="has_joined == false" class="bar-assertive">
     	<div class="title" style="text-align: center; margin: 0 -10px; cursor: pointer;" ng-click="doJoinOrganization(organization.id);">
       		加入
     	</div>

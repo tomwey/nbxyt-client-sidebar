@@ -34,8 +34,8 @@
 		<!-- 捐赠感谢 -->
 		<div class="card list" ng-show="isShowThanks">
 			<div class="item item-divider"><h2>捐赠感谢</h2></div>
-			<ion-item class="item-remove-animate item item-thumbnail-left item-icon-right item-text-wrap" ng-repeat="article in donatesInfo.thanks.data" href="#/app/articles/{{article.id}}">
-				<img ng-src="{{article.image}}">
+			<ion-item ng-class="{'item-thumbnail-left': article.image}" class="item-remove-animate item item-icon-right item-text-wrap" ng-repeat="article in donatesInfo.thanks.data" href="#/app/articles/{{article.id}}">
+				<img ng-src="{{article.image}}" ng-if="article.image">
 				<h3>{{article.title}}</h3>
 				<p>{{article.published_at}}</p>
 				<i class="icon ion-chevron-right icon-accessory"></i>

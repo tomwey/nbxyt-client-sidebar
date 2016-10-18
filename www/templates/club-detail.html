@@ -1,6 +1,6 @@
 <ion-view hide-tabs>
   <ion-nav-title>{{club.name}}</ion-nav-title>
-	<ion-content>
+	<ion-content ng-class="{'has-footer': !has_joined}">
 		<div class="list card">
 			<div class="item item-image">
 				<img ng-src="{{club.image}}">
@@ -21,7 +21,7 @@
 		</div>
 
 		<div class="card">
-			<a href="#/app/clubs/{{club.id}}/bylaws" class="item item-icon-right">
+			<a href="#/app/clubs/{{club.id}}/bylaw" class="item item-icon-right">
 				俱乐部章程
 				<i class="icon ion-chevron-right icon-accessory"></i>
 			</a>
@@ -45,15 +45,15 @@
 		<div class="card" ng-show="isShowUsers">
 			<div class="item item-divider">最近加入成员</div>
 			<ion-item class="item-remove-animate item-avatar item-icon-right item-button-right" ng-repeat="obj in club.latest_users" ng-click="gotoUserDetail(obj.uid);">
-        		<img ng-src="{{obj.avatar}}">
+        		<img ng-src="{{obj.avatar || 'img/default_avatar.png'}}">
         		<h2>{{obj.nickname}}</h2>
         		<p>{{obj.specialty}}&nbsp;&nbsp;{{obj.graduation}}</p>
         		<button class="button button-positive button-outline" style="font-size: 14px;" ng-click="gotoSendMessage(obj);$event.stopPropagation();">私信</button>
       		</ion-item>
-			<a class="item item-divider" href="#/app/users-Club" ng-show="isShowLoadMoreUsers"><h2>查看全部成员</h2></a>
+			<a class="item item-divider" ng-click="gotoUsers({ type: 'Club', id: club.id });" ng-show="isShowLoadMoreUsers"><h2>查看全部成员</h2></a>
 		</div>
 	</ion-content>
-	<ion-footer-bar class="bar-assertive" ng-show="!has_joined">
+	<ion-footer-bar class="bar-assertive" ng-if="has_joined == false">
     	<div class="title" style="text-align: center; margin: 0 -10px; cursor: pointer;" ng-click="doJoinClub(club.id);">
       		加入
     	</div>

@@ -18,6 +18,11 @@ angular.module('xiaoyoutong.controllers')
   	params.q = $scope.keyword;
   } 
 
+  if ($stateParams.owner) {
+  	params.owner_type = $stateParams.owner.type;
+  	params.owner_id   = $stateParams.owner.id;
+  } 
+
   $ionicLoading.show();
   DataService.get('/users', params).then(function(res) {
     $scope.users = res.data.data;

@@ -45,7 +45,7 @@ angular.module('xiaoyoutong.controllers')
 })
 
 // 校友组织详情
-.controller('OrganizationDetailCtrl', function($scope, $stateParams, DataService, $ionicLoading, $ionicPopup, UserService, PopupService, $state, $rootScope) {
+.controller('OrganizationDetailCtrl', function($scope, $stateParams, DataService, $ionicLoading, $ionicPopup, UserService, PopupService, $state, $rootScope, AWToast) {
 
   var loadData = function() {
     $scope.has_joined = false;
@@ -111,9 +111,11 @@ angular.module('xiaoyoutong.controllers')
       DataService.post('/relationships/organization/join', { token: token, id: $scope.organ_id }).then(function(resp){
         if (resp.data.code == 0) {
           $scope.has_joined = true;
+          AWToast.showText('加入成功', 1500);
         } else {
           $scope.has_joined = false;
-          PopupService.say('错误提示', resp.data.message);
+          // PopupService.say('错误提示', resp.data.message);
+          AWToast.showText(resp.data.message, 1500);
         }
       },function(err) {
         $scope.has_joined = false;

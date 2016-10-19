@@ -4,34 +4,71 @@
  angular.module('xiaoyoutong.controllers')
 
  // 活动列表页
-.controller('EventsCtrl', function($scope, DataService, $ionicLoading, $stateParams) {
-  console.log($stateParams);
+.controller('EventsCtrl', function($scope, DataService, $ionicLoading, $stateParams, PAGE_SIZE) {
+  // console.log($stateParams);
 
-  $ionicLoading.show();
-  
-  var params = {};
-  
-  if ($stateParams.owner) {
-    var ownerable = $stateParams.owner.split('-');
+  $scope.currentPage = 1;
+  $scope.pageSize    = PAGE_SIZE;
+  $scope.noMoreItemsAvailable = true;
+  $scope.totalPage   = 1;
 
-    if (ownerable[0]) {
-      params.owner_type = ownerable[0];
-    }
-    
-    if (ownerable[1]) {
-      params.owner_id = ownerable[1];
-    }
+  $scope.$on('$ionicView.beforeEnter', function(event, data) {
+    $ionicLoading.show();
 
-  }
-  
-  DataService.get('/events', params).then(function(result) {
-    $scope.events = result.data.data;
-  }, function(error) {
-    console.log(error);
-
-  }).finally(function(){
-    $ionicLoading.hide();
+    loadData();
   });
+
+  var loadData = function() {
+    var params = {};
+  
+    if ($stateParams.owner) {
+      var ownerable = $stateParams.owner.split('-');
+
+      if (ownerable[0]) {
+        params.owner_type = ownerable[0];
+      }
+      
+      if (ownerable[1]) {
+        params.owner_id = ownerable[1];
+      }
+    }
+
+      DataService.get('/events', params).then(function(res) {
+        if (res.data.code == 0) {
+          if ($scope.currentPage == 1) {
+            $scope.events = res.data.data;
+            $scope.totalPage = ( res.data.total + $scope.pageSize - 1 ) / $scope.pageSize;
+          } else {
+            if (res.data.data.length == 0) {
+              AWToast.showText('没有更多数据', 1500);
+            } else {
+              $scope.events = $scope.events.concat(res.data.data);
+            }
+          }
+
+          // 检查是否有更多数据
+          if ($scope.currentPage < $scope.totalPage) {
+            $scope.noMoreItemsAvailable = false;
+          } else {
+            $scope.noMoreItemsAvailable = true;
+          }
+        } else {
+          AWToast.showText(res.data.message, 1500);
+        }
+        
+      }, function(error) {
+        AWToast.showText('服务器出错', 1500);
+      }).finally(function(){
+        $ionicLoading.hide();
+      });
+  };
+  
+  $scope.loadMore = function() {
+    if ($scope.currentPage < $scope.totalPage) {
+      $scope.currentPage ++;
+      loadData();
+    }
+  };
 })
 
 // 活动详情

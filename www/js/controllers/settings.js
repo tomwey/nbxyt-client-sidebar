@@ -91,24 +91,57 @@ angular.module('xiaoyoutong.controllers')
   }
 })
 // 我参加的活动
-.controller('UserEventsCtrl', function($scope, DataService, $ionicLoading, UserService) {
+.controller('UserEventsCtrl', function($scope, DataService, $ionicLoading,PAGE_SIZE, UserService, AWToast) {
   
+  $scope.currentPage = 1;
+  $scope.pageSize    = PAGE_SIZE;
+  $scope.noMoreItemsAvailable = true;
+  $scope.totalPage   = 1;
+
   $scope.$on('$ionicView.beforeEnter', function() {
     // console.log('123321');
+    $ionicLoading.show();
     loadData();
   });
   
-  function loadData() {
-    $ionicLoading.show();
-  
-    DataService.get('/user/events', { token: UserService.token() }).then(function(resp) {
-      $scope.events = resp.data.data;
+  var loadData = function () {
+    
+    DataService.get('/user/events', { token: UserService.token() }).then(function(res) {
+      if (res.data.code == 0) {
+          if ($scope.currentPage == 1) {
+            $scope.events = res.data.data;
+            $scope.totalPage = ( res.data.total + $scope.pageSize - 1 ) / $scope.pageSize;
+          } else {
+            if (res.data.data.length == 0) {
+              AWToast.showText('没有更多数据', 1500);
+            } else {
+              $scope.events = $scope.events.concat(res.data.data);
+            }
+          }
+
+          // 检查是否有更多数据
+          if ($scope.currentPage < $scope.totalPage) {
+            $scope.noMoreItemsAvailable = false;
+          } else {
+            $scope.noMoreItemsAvailable = true;
+          }
+        } else {
+          AWToast.showText(res.data.message, 1500);
+        }
     }, function(err) {
-      console.log(err);
+      AWToast.showText('服务器出错了', 1500);
     }).finally(function() {
       $ionicLoading.hide();
     });
-  }
+  };
+
+  $scope.loadMore = function() {
+    if ($scope.currentPage < $scope.totalPage) {
+      $scope.currentPage ++;
+
+      loadData();
+    }
+  };
   
 })
 

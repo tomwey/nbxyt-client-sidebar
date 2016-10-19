@@ -44,12 +44,12 @@
 })
 
 // 捐赠文章列表
-.controller('ArticlesCtrl', function($scope, $stateParams, DataService, $ionicLoading) {
+.controller('ArticlesCtrl', function($scope, $stateParams, DataService, $ionicLoading, PAGE_SIZE) {
   
   var _this = this;
   
   $scope.currentPage = 1;
-  $scope.pageSize    = 8;
+  $scope.pageSize    = PAGE_SIZE;
   $scope.noMoreItemsAvailable = true;
   $scope.totalPage   = 1;
   

@@ -6,13 +6,13 @@
 angular.module('xiaoyoutong.controllers')
 
 // 校友列表
-.controller('UsersCtrl', function($scope, $rootScope, UserService, DataService, $ionicLoading, $stateParams, $timeout, AWToast, $state) {
+.controller('UsersCtrl', function($scope, $rootScope, UserService, DataService,PAGE_SIZE, $ionicLoading, $stateParams, $timeout, AWToast, $state) {
   // $scope.keyword = '';
 
   $scope.input = { keyword: '' };
 
   $scope.currentPage = 1;
-  $scope.pageSize    = 8;
+  $scope.pageSize    = PAGE_SIZE;
   $scope.noMoreItemsAvailable = true;
   $scope.totalPage   = 1;
 

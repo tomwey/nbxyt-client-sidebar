@@ -36,11 +36,11 @@ angular.module('xiaoyoutong.controllers')
 })
 
 // 消息页面
-.controller('MessagesCtrl', function($scope, $rootScope, $timeout, $ionicScrollDelegate, DataService, $ionicLoading, UserService, $stateParams, AWToast) {
+.controller('MessagesCtrl', function($scope, $rootScope, $timeout, $ionicScrollDelegate, DataService, $ionicLoading, UserService, $stateParams, AWToast, PAGE_SIZE) {
 
 	$scope.currentPage = 1;
 	$scope.totalPage   = 1;
-	$scope.pageSize    = 8;
+	$scope.pageSize    = PAGE_SIZE;
 
 	$scope.to_user = $stateParams.to;
 

@@ -16,6 +16,9 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
   // 原生滚动
   $ionicConfigProvider.scrolling.jsScrolling(false);
 
+  // 禁用ios平台滑动返回
+  $ionicConfigProvider.views.swipeBackEnabled(false);
+
   // 仅仅在设备上支持
   $ionicNativeTransitionsProvider.setDefaultOptions({
         duration: 280, // in milliseconds (ms), default 400,
@@ -41,10 +44,11 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
 
 }])
 
-.run(function($ionicPlatform, $location, $rootScope, $ionicNativeTransitions, $localStorage, UserService, $state, amMoment) {
+.run(function($ionicPlatform, $location, $rootScope, $ionicNativeTransitions, $localStorage, UserService, $state, amMoment, DataService, $timeout) {
 
   amMoment.changeLocale('zh-cn');
 
+  // 跳转到登录
   $rootScope.login = function() {
     $state.go('app.login');
   };
@@ -57,6 +61,7 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
      });
   };
 
+  // 跳转到校友详情
   $rootScope.gotoUserDetail = function(uid) {
     if ( !UserService.currentUser() ) {
       $state.go('app.login');
@@ -65,6 +70,7 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
     }
   };
 
+  // 跳转到banner详情
   $rootScope.gotoBannerDetail = function(banner) {
     if (banner.bannerable_type === 'event') {
       $rootScope.gotoEventDetail(banner.bannerable_id, false);
@@ -123,17 +129,36 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
     if (window.plugins && window.plugins.jPushPlugin) {
       // 启动极光推送
       window.plugins.jPushPlugin.init();
+      
       //调试模式
       window.plugins.jPushPlugin.setDebugMode(true);
 
-    if (UserService.currentUser()) {
-      window.plugins.jPushPlugin.setAlias(UserService.currentUser().uid);
+      // 设置别名
+      if (UserService.currentUser()) {
+        window.plugins.jPushPlugin.setAlias(UserService.currentUser().uid);
+      }
     }
-    } else {
 
-    }
-     
+    document.addEventListener("resume", resume, false);
+    function resume() {
+      loadUnreadMessageCount();
+    };
+
   });
+
+  var loadUnreadMessageCount = function() {
+    $rootScope.unread_message_count = 9999;
+    if ( UserService.token() ) {
+      DataService.get('/messages/unread_count', { token: UserService.token() })
+      .then(function(res) {
+        if (res.data.count) {
+          $rootScope.unread_message_count = res.data.count;
+        } 
+      });
+    } 
+  };
+
+  loadUnreadMessageCount();
 
 })
 

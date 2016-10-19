@@ -6,6 +6,7 @@
 
       <ion-nav-buttons side="left">
         <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
+          <span class="unread-badge" ng-if="unread_message_count > 0"></span>
         </button>
       </ion-nav-buttons>
     </ion-nav-bar>
@@ -23,6 +24,7 @@
         </ion-item>
         <ion-item menu-close href="#/app/message-sessions">
           消息
+          <span class="badge badge-assertive" ng-if="unread_message_count > 0">{{unread_message_count >= 100 ? '99+' : unread_message_count }}</span>
         </ion-item>
         <ion-item menu-close href="#/app/setting">
           我的

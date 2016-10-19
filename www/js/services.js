@@ -1,6 +1,7 @@
 angular.module('xiaoyoutong.services', [])
 .constant('apiHost', 'http://xyt.deyiwifi.com/api/v1')
 .constant('PAGE_SIZE', 15)
+.constant('YB_APP_KEY', '58076c8cd69873332db470f6')
 .service('AccessKeyService', function($base64) {
   this.fromTimestamp = function(timestamp) {
     return $base64.encode('efd12eada3aa4976994546572c235cd8' + timestamp);
@@ -77,7 +78,7 @@ angular.module('xiaoyoutong.services', [])
   };
 })
 
-.service('UserService', function($localStorage) {
+.service('UserService', function($localStorage, Chat) {
   this.currentUser = function() {
     var user = $localStorage.getObject('user', null);
     if (user) {
@@ -97,14 +98,13 @@ angular.module('xiaoyoutong.services', [])
   this.login = function(user) {
     console.log(user);
     if (user) {
-      if (window.plugins && window.plugins.jPushPlugin) {
-        window.plugins.jPushPlugin.setAlias(user.uid);
-      } 
+      Chat.setAlias(user.uid);
       $localStorage.storeObject('user', user);
     }
   };
 
   this.logout = function() {
+    Chat.setAlias(null);
     $localStorage.removeObject('user');
   };
 })

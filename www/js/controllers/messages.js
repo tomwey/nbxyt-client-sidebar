@@ -36,7 +36,7 @@ angular.module('xiaoyoutong.controllers')
 })
 
 // 消息页面
-.controller('MessagesCtrl', function($scope, $rootScope, $timeout, $ionicScrollDelegate, DataService, $ionicLoading, UserService, $stateParams, AWToast, PAGE_SIZE) {
+.controller('MessagesCtrl', function($scope, $rootScope, Chat, $timeout, $ionicScrollDelegate, DataService, $ionicLoading, UserService, $stateParams, AWToast, PAGE_SIZE) {
 
 	$scope.currentPage = 1;
 	$scope.totalPage   = 1;
@@ -50,41 +50,20 @@ angular.module('xiaoyoutong.controllers')
 
 	var viewScroll = $ionicScrollDelegate.$getByHandle('userMessageScroll');
 
-	// document.addEventListener("jpush.receiveNotification", onReceiveNotification, false);
-	window.plugins.jPushPlugin.receiveNotificationIniOSCallback = onReceiveNotification;
-	var onReceiveNotification = function(event, data) {
-		alert(data);
-		var message = {
-			id: 2,
-			msg_id: "58dbe7ee0a47437f86b5c009c4baa8b3",
-			content: "很不错😄",
-			is_from_me: false,
-			time: "2016-10-18 21:09:12",
-			sender: {
-				id: 1,
-				uid: "10001",
-				nickname: "tomwey",
-				hack_mobile: "180****3687",
-				avatar: ""
-			},
-			recipient: {
-				id: 2,
-				uid: "10002",
-				nickname: "",
-				hack_mobile: "136****3430",
-				avatar: ""
-			}
-		};
-		$scope.messages.push(message);
-		$timeout(function() {
-			viewScroll.scrollBottom(true);
-		}, 10);
-	};
-
 	$scope.$on('$ionicView.beforeEnter', function(event, data) {
 		// console.log($stateParams.to);
 
 		loadData($stateParams.to);
+
+		Chat.onReceiveMessageCallback(function(data) {
+			// console.log(data.msg);
+			var msg = JSON.parse(data.msg);
+			msg.is_from_me = false;
+			$scope.messages.push(msg);
+			$timeout(function() {
+					viewScroll.scrollBottom(true);
+			}, 10);
+		});
 	});
 
 	var loadData = function(to) {
@@ -138,12 +117,25 @@ angular.module('xiaoyoutong.controllers')
 	// 发消息
 	$scope.sendMessage = function() {
 		$ionicLoading.show();
-		// userMessageScroll
+
 		DataService.post('/messages/send', $scope.message)
 			.then(function(res) {
 				if (res.data.code == 0) {
 					$scope.message.content = '';
 					$scope.messages.push(res.data.data);
+
+					var msg = res.data.data;
+					// msg.is_from_me = false;
+
+					Chat.sendToUser($scope.message.to, JSON.stringify(msg), function(success, msg, to_user) {
+						if (success) {
+							AWToast.showText('发送成功: ' + to_user, 1500);
+
+						} else {
+							AWToast.showText('发送失败: ' + to_user, 1500);
+						}
+			
+					});
 
 					$timeout(function() {
 						viewScroll.scrollBottom(true);

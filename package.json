@@ -28,5 +28,7 @@
     "cordova-plugin-wkwebview",
     "cordova-plugin-camera"
   ],
-  "cordovaPlatforms": []
+  "cordovaPlatforms": [
+    "android"
+  ]
 }

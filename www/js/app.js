@@ -44,7 +44,7 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
 
 }])
 
-.run(function($ionicPlatform, $location, $rootScope, $ionicNativeTransitions, $localStorage, UserService, $state, amMoment, DataService, $timeout) {
+.run(function($ionicPlatform, $location, $rootScope, $ionicNativeTransitions, $localStorage, UserService, $state, amMoment, AWToast, Device, DataService, $cordovaDevice, $timeout, Chat) {
 
   amMoment.changeLocale('zh-cn');
 
@@ -126,23 +126,37 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
       StatusBar.styleDefault();
     }
     
-    if (window.plugins && window.plugins.jPushPlugin) {
-      // 启动极光推送
-      window.plugins.jPushPlugin.init();
+    // if (window.plugins && window.plugins.jPushPlugin) {
+    //   // 启动极光推送
+    //   window.plugins.jPushPlugin.init();
       
-      //调试模式
-      window.plugins.jPushPlugin.setDebugMode(true);
+    //   //调试模式
+    //   window.plugins.jPushPlugin.setDebugMode(true);
 
-      // 设置别名
-      if (UserService.currentUser()) {
-        window.plugins.jPushPlugin.setAlias(UserService.currentUser().uid);
-      }
-    }
+    //   // 设置别名
+    //   if (UserService.currentUser()) {
+    //     window.plugins.jPushPlugin.setAlias(UserService.currentUser().uid);
+    //   }
+    // }
 
     document.addEventListener("resume", resume, false);
     function resume() {
       loadUnreadMessageCount();
     };
+
+    // $timeout(function() {
+    //   AWToast.showText(Device.getDevice().uuid, 1500);
+    // }, 2000);
+    var uuid = Device.getDevice().uuid;
+    if (uuid) {
+      // 聊天连接
+      Chat.connect(uuid);
+      
+      if (UserService.currentUser()) {
+        Chat.setAlias(UserService.currentUser().uid);
+      }
+    }
+    
 
   });
 

@@ -6,7 +6,7 @@
  angular.module('xiaoyoutong.controllers')
 
  // 俱乐部列表页面
-.controller('ClubsCtrl', function($scope, DataService, $ionicLoading) {
+.controller('ClubsCtrl', function($scope, DataService, AWToast, $ionicLoading, $timeout) {
 
   $ionicLoading.show();
 

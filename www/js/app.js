@@ -13,6 +13,9 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
   $ionicConfigProvider.backButton.previousTitleText(false);
   $ionicConfigProvider.backButton.text('');
 
+  // 原生滚动
+  $ionicConfigProvider.scrolling.jsScrolling(false);
+
   // 仅仅在设备上支持
   $ionicNativeTransitionsProvider.setDefaultOptions({
         duration: 280, // in milliseconds (ms), default 400,

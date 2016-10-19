@@ -27,9 +27,11 @@
           $scope.user = res.data.data;
           $scope.user.token = token;
           UserService.login($scope.user);
-        } 
+        } else {
+          AWToast.showText(res.data.message, 1500);
+        }
       },function(err) {
-
+        AWToast.showText('服务器出错', 1500);
       })
       .finally(function() {
         $ionicLoading.hide();
@@ -101,14 +103,22 @@
           DataService.post('/user/update_base64_avatar', { token: UserService.token(), avatar: $scope.user.avatar })
             .then(function(res) {
               // console.log(res);
+              if (res.data.code === 0) {
+                AWToast.showText('头像设置成功', 1500);
+              } else {
+                AWToast.showText(res.data.message, 1500);
+              }
+              
             }, function(err) {
-              console.log(err);
+              // console.log(err);
+              AWToast.showText('服务器出错', 1500);
             }).finally(function() {
               $ionicLoading.hide();
             });
         }, function(err) {
           // error
-          console.log(err);
+          // console.log(err);
+          AWToast.showText('获取图片失败', 1500);
         });
   };
   
@@ -120,12 +130,15 @@
     DataService.post('/user/update_nickname', { token: $scope.user.token, nickname: $scope.updateUser.nickname })
       .then(function(res) {
         if (res.data.code === 0) {
+          AWToast.showText('昵称设置成功', 1500);
           $ionicHistory.goBack();
         } else {
-          console.log(res.data.message);
+          // console.log(res.data.message);
+          AWToast.showText(res.data.message, 1500);
         }
       },function(err) {
-        console.log(err);
+        // console.log(err);
+        AWToast.showText('服务器出错', 1500);
       })
       .finally(function() {
         $ionicLoading.hide();
@@ -143,12 +156,15 @@
     DataService.post('/user/update_mobile', { token: $scope.user.token, mobile: $scope.updateUser.new_mobile, code: $scope.updateUser.code })
       .then(function(res) {
         if (res.data.code === 0) {
+          AWToast.showText('更新手机号成功', 1500);
           $ionicHistory.goBack();
         } else {
-          console.log(res.data.message);
+          // console.log(res.data.message);
+          AWToast.showText(res.data.message, 1500);
         }
       },function(err) {
-        console.log(err);
+        // console.log(err);
+        AWToast.showText('服务器出错', 1500);
       })
       .finally(function() {
         $ionicLoading.hide();
@@ -175,12 +191,15 @@
     DataService.post('/user/update_password', params)
       .then(function(res) {
         if (res.data.code === 0) {
+          AWToast.showText('密码修改成功', 1500);
           $ionicHistory.goBack();
         } else {
-          console.log(res.data.message);
+          // console.log(res.data.message);
+          AWToast.showText(res.data.message, 1500);
         }
       },function(err) {
-        console.log(err);
+        // console.log(err);
+        AWToast.showText('服务器出错', 1500);
       })
       .finally(function() {
         $ionicLoading.hide();
@@ -191,6 +210,7 @@
     
     PopupService.ask('退出登录', '你确定吗？', function() {
       UserService.logout();
+      AWToast.showText('退出登录成功', 1500);
       $ionicHistory.goBack();
     })
 
@@ -207,37 +227,30 @@
 
   // 获取验证码
   $scope.fetchCode = function() {
-    // if ( !FormCheck.not_blank($scope.updateUser.mobile, '手机号不能为空') || 
-    // !FormCheck.regex_validate($scope.updateUser.mobile, /^1[34578]\d{9}$/, '手机号不正确') ) {
-    //   return;
-    // }
+    if ( !FormCheck.not_blank($scope.updateUser.mobile, '手机号不能为空') || 
+    !FormCheck.regex_validate($scope.updateUser.mobile, /^1[34578]\d{9}$/, '手机号不正确') ) {
+      return;
+    }
 
-    console.log(1111);
-
-    // $ionicLoading.show();
-    // DataService.post('/auth_codes', { mobile: $scope.updateUser.mobile }).then(function(res) {
-    //   if (res.data.code == 0) {
-    //     AWToast.showText('短信验证码已发送');
-    //   } else {
-    //     console.log(res.data.message)
-    //     // AWToast.showText(res.data.message);
-    //     $ionicLoading.show({
-    //       noBackdrop: true,
-    //       template: res.data.message,
-    //       duration: 1000,
-    //     });
-    //   }
-    //   console.log(res);
-    // }, function(err) {
-    //   console.log(err);
-    //   AWToast.showText('Oops, 服务器出错了');
-    // }).finally(function() {
-    //   $ionicLoading.hide();
-    // });
+    $ionicLoading.show();
+    DataService.post('/auth_codes', { mobile: $scope.updateUser.mobile }).then(function(res) {
+      if (res.data.code == 0) {
+        AWToast.showText('短信验证码已发送', 1500);
+      } else {
+        AWToast.showText(res.data.message, 1500);
+      }
+      // console.log(res);
+    }, function(err) {
+      // console.log(err);
+      // AWToast.showText('Oops, 服务器出错了');
+      AWToast.showText('服务器出错', 1500);
+    }).finally(function() {
+      $ionicLoading.hide();
+    });
   };
 
   $scope.doUpdatePassword = function() {
-    
+  
   var params = { 
         mobile: $scope.updateUser.mobile, 
         code: $scope.updateUser.code,
@@ -249,12 +262,15 @@
   DataService.post('/user/update_password', params)
       .then(function(res) {
         if (res.data.code === 0) {
+          AWToast.showText('密码重置成功', 1500);
           $state.go(toState);
         } else {
-          console.log(res.data.message);
+          // console.log(res.data.message);
+          AWToast.showText(res.data.message, 1500);
         }
       },function(err) {
-        console.log(err);
+        // console.log(err);
+        AWToast.showText('服务器出错', 1500);
       })
       .finally(function() {
         $ionicLoading.hide();
@@ -263,32 +279,8 @@
 
 })
 
-.controller('UpdateProfileCtrl', function($scope, DataService, $ionicLoading, UserService) {
-  var currentUser = UserService.currentUser();
-
-  $scope.user = { nickname: currentUser.nickname, 
-                  mobile: currentUser.mobile,
-                  code: '',
-                  new_mobile: '',
-                  password: '',
-                };
-  $scope.doUpdateNickname = function() {
-
-  };
-
-  $scope.doUpdateMobile   = function() {
-
-  };
-
-  $scope.doUpdatePassword = function() {
-
-  };
-})
-
-
-
 // 登录
-.controller('LoginCtrl', function($scope,$ionicHistory, $state, $rootScope, DataService, $ionicLoading, FormCheck, UserService) {
+.controller('LoginCtrl', function($scope,$ionicHistory, $state, $rootScope, DataService, $ionicLoading, FormCheck, UserService, AWToast) {
   $scope.user = {mobile: '', password: ''};
 
   $scope.doLogin = function() {
@@ -304,12 +296,15 @@
       if (res.data.code === 0) {
         UserService.login(res.data.data);
         // $state.go($rootScope.login_from);
+        AWToast.showText('登录成功', 1500);
         $ionicHistory.goBack();
       } else {
-        console.log(res.data.message);
+        // console.log(res.data.message);
+        AWToast.showText(res.data.message, 1500);
       }
     }, function(err) {
-      console.log(err);
+      // console.log(err);
+      AWToast.showText('服务器出错', 1500);
     }).finally(function() {
       $ionicLoading.hide();
     })
@@ -346,10 +341,12 @@
           $rootScope.signupForm = $scope.user;
           $state.go('app.signup-final');
         } else {
-          console.log(res.data.message);
+          // console.log(res.data.message);
+          AWToast.showText(res.data.message, 1500);
         }
       }, function(err) {
-        console.log(err);
+        // console.log(err);
+        AWToast.showText('服务器出错', 1500);
       })
       .finally(function(){
         $ionicLoading.hide();
@@ -375,7 +372,7 @@
       }
       console.log(res);
     }, function(err) {
-      console.log(err);
+      // console.log(err);
       AWToast.showText('Oops, 服务器出错了', 1000);
     }).finally(function() {
       $ionicLoading.hide();
@@ -395,9 +392,15 @@ stu_no: '', faculty_id: '', specialty_id: '', graduation_id: ''};
   $ionicLoading.show();
   DataService.get('/college/specialties')
     .then(function(res) {
-      $scope.faculties = res.data.data;
+      if (res.data.code === 0) {
+        $scope.faculties = res.data.data;
+      } else {
+        AWToast.showText('获取院系数据失败', 1500);
+      }
+      
     }, function(err) {
-      console.log(err);
+      // console.log(err);
+      AWToast.showText('服务器出错', 1500);
     })
     .finally(function() {
       // 加载班级
@@ -405,7 +408,8 @@ stu_no: '', faculty_id: '', specialty_id: '', graduation_id: ''};
       .then(function(res) {
         $scope.graduations = res.data.data;
       }, function(err) {
-        console.log(err);
+        // console.log(err);
+        AWToast.showText('服务器出错', 1500);
       })
       .finally(function() {
         $ionicLoading.hide();
@@ -436,7 +440,7 @@ stu_no: '', faculty_id: '', specialty_id: '', graduation_id: ''};
       return;
     }
 
-    console.log($scope.user);
+    // console.log($scope.user);
 
     // 提交注册
     $ionicLoading.show();
@@ -446,20 +450,19 @@ stu_no: '', faculty_id: '', specialty_id: '', graduation_id: ''};
           UserService.login(res.data.data);
           // $state.go($rootScope.login_from);
           $ionicHistory.goBack(-2);
+          AWToast.showText('注册成功', 1500);
         } else {
-          console.log(res.data.message);
+          // console.log(res.data.message);
+          AWToast.showText(res.data.message, 1500);
         }
       }, function(err) {
-        console.log(err);
+        // console.log(err);
+        AWToast.showText('服务器出错', 1500);
       })
       .finally(function() {
         $ionicLoading.hide();
     });
   };
 
-})
-
-.controller('PasswordCtrl', function($scope, $state) {
-  $scope.user = { mobile: '', password: '', code: '' };
 })
 ;

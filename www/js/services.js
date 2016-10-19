@@ -1,5 +1,5 @@
 angular.module('xiaoyoutong.services', [])
-.constant('apiHost', 'http://10.0.16.54:3000/api/v1')
+.constant('apiHost', 'http://xyt.deyiwifi.com/api/v1')
 .service('AccessKeyService', function($base64) {
   this.fromTimestamp = function(timestamp) {
     return $base64.encode('efd12eada3aa4976994546572c235cd8' + timestamp);
@@ -96,7 +96,9 @@ angular.module('xiaoyoutong.services', [])
   this.login = function(user) {
     console.log(user);
     if (user) {
-      window.plugins.jPushPlugin.setAlias(user.uid);
+      if (window.plugins && window.plugins.jPushPlugin) {
+        window.plugins.jPushPlugin.setAlias(user.uid);
+      } 
       $localStorage.storeObject('user', user);
     }
   };
@@ -154,7 +156,7 @@ angular.module('xiaoyoutong.services', [])
   // 非空检查
   form.not_blank = function(value, error_msg) {
     if (!value || value.trim().length == 0) {
-      AWToast.showText(error_msg);
+      AWToast.showText(error_msg, 1000);
       return false;
     }
     return true;
@@ -167,7 +169,7 @@ angular.module('xiaoyoutong.services', [])
     }
 
     if ( !regex.test(value) ) {
-      AWToast.showText(error_msg);
+      AWToast.showText(error_msg, 1000);
       return false;
     }
 
@@ -177,7 +179,7 @@ angular.module('xiaoyoutong.services', [])
   // 长度检查
   form.min_length = function(value, length, error_msg) {
     if (value.length < length) {
-      AWToast.showText(error_msg);
+      AWToast.showText(error_msg, 1000);
       return false;
     }
 

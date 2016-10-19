@@ -17,6 +17,7 @@ angular.module('xiaoyoutong.controllers')
   $scope.totalPage   = 1;
 
   $scope.$on('$ionicView.beforeEnter', function(event, data) {
+    $ionicLoading.show();
     loadData();
   });
 
@@ -26,7 +27,8 @@ angular.module('xiaoyoutong.controllers')
       params.token = UserService.token();
     } 
 
-    if ($scope.input.keyword.length > 0) {
+    var keyword = $scope.input.keyword.trim();
+    if (keyword.length > 0) {
       params.q = $scope.input.keyword;
     } 
 
@@ -35,7 +37,6 @@ angular.module('xiaoyoutong.controllers')
       params.owner_id   = $stateParams.owner.id;
     } 
 
-    $ionicLoading.show();
     DataService.get('/users', params).then(function(res) {
       if (res.data.code === 0) {
         if ($scope.currentPage === 1) {
@@ -67,6 +68,11 @@ angular.module('xiaoyoutong.controllers')
   };
 
   $scope.doSearch = function() {
+    $scope.users = [];
+    $scope.currentPage = 1;
+    $scope.totalPage   = 1;
+    $scope.noMoreItemsAvailable = true;
+
     loadData();
   };
 

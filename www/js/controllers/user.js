@@ -6,7 +6,7 @@
  angular.module('xiaoyoutong.controllers')
 
  // 我的
-.controller('UserCtrl', function($scope,$ionicHistory, $state, FormCheck, PopupService, DataService, $ionicLoading, UserService, AWToast, $cordovaCamera) {
+.controller('UserCtrl', function($scope,$ionicHistory, $state, FormCheck, PopupService, DataService, $ionicLoading, UserService, AWToast, $cordovaCamera, $timeout, $interval) {
   
   $scope.noReadonly = false;
 
@@ -51,6 +51,9 @@
     $state.go('app.update-nickname');
   };
 
+  $scope.canFetchCode = true;
+  $scope.fetchCodeTitle = "获取验证码";
+  
   // 获取验证码
   $scope.doFetchCode = function() {
     if ( !FormCheck.not_blank($scope.updateUser.mobile, '手机号不能为空') || 
@@ -58,17 +61,30 @@
       return;
     }
 
+    $scope.canFetchCode = false;
+    
+    // 倒计时
+    var seconds = 60;
+    var timer = $interval(function() {
+      $scope.fetchCodeTitle = --seconds + '';
+      if (seconds == 0) {
+        $scope.fetchCodeTitle = "获取验证码";
+        $scope.canFetchCode = true;
+        $interval.cancel(timer);
+      }
+    }, 1000);
+    
     $ionicLoading.show();
     DataService.post('/auth_codes', { mobile: $scope.updateUser.mobile }).then(function(res) {
       if (res.data.code == 0) {
         AWToast.showText('短信验证码已发送', 1500);
       } else {
-        console.log(res.data.message)
+        // console.log(res.data.message)
         AWToast.showText(res.data.message, 1500);
       }
       console.log(res);
     }, function(err) {
-      console.log(err);
+      // console.log(err);
       AWToast.showText('Oops, 服务器出错了', 1500);
     }).finally(function() {
       $ionicLoading.hide();

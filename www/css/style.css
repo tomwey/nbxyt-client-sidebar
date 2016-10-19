@@ -69,8 +69,14 @@
 }
 
 .code-button {
-	padding: 5px;
-	cursor: pointer;
+/*  padding: 5px;*/
+/*  cursor: pointer;*/
+  width: 90px;
+  text-align: center;
+}
+
+.code-input-wrapper input {
+  width: 120px;
 }
 
 .item-text-right span, .item-text-right p  {

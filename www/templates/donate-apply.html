@@ -9,7 +9,7 @@
 		    		<input type="text" placeholder="联系方式" ng-model="donate_apply.contact">
 		  		</label>
 		  		<label class="item">
-          			<button class="button button-block button-positive" type="submit">提交</button>
+          			<button class="button button-block button-positive" type="submit" ng-disabled="donate_apply.contact == '' || donate_apply.content == ''">提交</button>
         		</label>
 			</div>
 		</form>

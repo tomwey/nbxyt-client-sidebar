@@ -148,13 +148,15 @@
     
     var content = $scope.donate_apply.content;
     if (content.trim() === '') {
-      alert('内容必填');
+      // alert('内容必填');
+      AWToast.showText('捐赠意向不能为空', 1500);
       return;
     }
     
     var author = $scope.donate_apply.contact;
     if (author.trim() === '') {
-      alert('联系方式必填');
+      // alert('联系方式必填');
+      AWToast.showText('联系方式不能为空', 1500);
       return;
     }
     

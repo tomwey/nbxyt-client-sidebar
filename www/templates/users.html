@@ -1,12 +1,17 @@
 <ion-view view-title="同学录">
+  <ion-nav-buttons side="right">
+    <a class="button button-clear button-positive" 
+    ng-disabled="input.keyword == ''" ng-click="doSearch();">搜索</a>
+  </ion-nav-buttons>
   <ion-content>
   	<ion-list>
-      <ion-item>
+      <ion-item class="send-message">
         <label class="item item-input">
           <i class="icon ion-search placeholder-icon"></i>
-          <input type="text" ng-model="keyword" placeholder="输入昵称或者专业">
+          <input type="text" ng-model="input.keyword" placeholder="输入昵称或者专业">
         </label>
       </ion-item>
+      <!-- <div class="item item-divider"></div> -->
   		<ion-item class="item-remove-animate item-avatar item-icon-right item-button-right" collection-repeat="user in users" type="item-text-wrap" ng-click="gotoUserDetail(user.uid);">
         <img ng-src="{{user.avatar || 'img/default_avatar.png'}}">
         <h2>{{user.nickname || user.hack_mobile}}</h2>
@@ -14,5 +19,8 @@
         <button class="button button-positive button-outline" style="font-size: 14px;" ng-click="gotoSendMessage(user); $event.stopPropagation();">私信</button>
       </ion-item>
   	</ion-list>
+    <ion-infinite-scroll ng-if="!noMoreItemsAvailable" 
+      on-infinite="loadMore()" distance="10%">
+    </ion-infinite-scroll>
   </ion-content>
 </ion-view>

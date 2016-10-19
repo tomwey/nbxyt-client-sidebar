@@ -57,21 +57,26 @@
     console.log('loading page: ' + page);
     $ionicLoading.show();
     DataService.get('/articles/type' + parseInt($stateParams.id), { page: page, size: size }).then(function(result) {
-      var articleInfo = result.data.data;
       
-      if (page == 1) {
-        $scope.articleInfo = articleInfo;
-        $scope.totalPage   = ( articleInfo.total + $scope.pageSize - 1 ) / $scope.pageSize;
-      } else {
-        var data = $scope.articleInfo.data;
-        $scope.articleInfo.data = data.concat(articleInfo.data);
-      }
+      if (result.data.code === 0) {
+        var articleInfo = result.data.data;
       
-      // 检查是否有更多数据
-      if (page < $scope.totalPage) {
-        $scope.noMoreItemsAvailable = false;
+        if (page == 1) {
+          $scope.articleInfo = articleInfo;
+          $scope.totalPage   = ( articleInfo.total + $scope.pageSize - 1 ) / $scope.pageSize;
+        } else {
+          var data = $scope.articleInfo.data;
+          $scope.articleInfo.data = data.concat(articleInfo.data);
+        }
+        
+        // 检查是否有更多数据
+        if (page < $scope.totalPage) {
+          $scope.noMoreItemsAvailable = false;
+        } else {
+          $scope.noMoreItemsAvailable = true;
+        }
       } else {
-        $scope.noMoreItemsAvailable = true;
+
       }
       
     }, function(err) {

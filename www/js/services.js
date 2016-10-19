@@ -96,6 +96,7 @@ angular.module('xiaoyoutong.services', [])
   this.login = function(user) {
     console.log(user);
     if (user) {
+      window.plugins.jPushPlugin.setAlias(user.uid);
       $localStorage.storeObject('user', user);
     }
   };

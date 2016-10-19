@@ -119,7 +119,20 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
-       
+    
+    if (window.plugins && window.plugins.jPushPlugin) {
+      // 启动极光推送
+      window.plugins.jPushPlugin.init();
+      //调试模式
+      window.plugins.jPushPlugin.setDebugMode(true);
+
+    if (UserService.currentUser()) {
+      window.plugins.jPushPlugin.setAlias(UserService.currentUser().uid);
+    }
+    } else {
+
+    }
+     
   });
 
 })

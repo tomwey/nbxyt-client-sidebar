@@ -3,7 +3,7 @@
 // 推送服务
 angular.module('xiaoyoutong.services')
 
-.factory('Push', function(ENV, $log) {
+.factory('Push', function($log) {
 	var push;
 	return {
 		setBadge: function(badge) {
@@ -29,7 +29,7 @@ angular.module('xiaoyoutong.services')
 	    	if (push) {
 	        	$log.debug('jpush: init');
 	        	plugins.jPushPlugin.init();
-	        	plugins.jPushPlugin.setDebugMode(ENV.debug);
+	        	plugins.jPushPlugin.setDebugMode(true);
 	        	plugins.jPushPlugin.openNotificationInAndroidCallback = notificationCallback;
 	        	plugins.jPushPlugin.receiveNotificationIniOSCallback = notificationCallback;
 	      	}

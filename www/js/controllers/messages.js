@@ -5,6 +5,13 @@ angular.module('xiaoyoutong.controllers')
 // 消息会话页面
 .controller('MessageSessionsCtrl', function($scope, $rootScope, DataService, $ionicLoading, UserService) {
 
+	document.addEventListener("jpush.receiveNotification", onReceiveNotification, false);
+
+	var onReceiveNotification = function(event) {
+		console.log(123);
+		alert(event);
+	};
+
 	$scope.$on('$ionicView.beforeEnter', function(event, data) {
 		$scope.isLogined = !!UserService.token();
 
@@ -42,6 +49,37 @@ angular.module('xiaoyoutong.controllers')
 	$scope.messages = [];
 
 	var viewScroll = $ionicScrollDelegate.$getByHandle('userMessageScroll');
+
+	// document.addEventListener("jpush.receiveNotification", onReceiveNotification, false);
+	window.plugins.jPushPlugin.receiveNotificationIniOSCallback = onReceiveNotification;
+	var onReceiveNotification = function(event, data) {
+		alert(data);
+		var message = {
+			id: 2,
+			msg_id: "58dbe7ee0a47437f86b5c009c4baa8b3",
+			content: "很不错😄",
+			is_from_me: false,
+			time: "2016-10-18 21:09:12",
+			sender: {
+				id: 1,
+				uid: "10001",
+				nickname: "tomwey",
+				hack_mobile: "180****3687",
+				avatar: ""
+			},
+			recipient: {
+				id: 2,
+				uid: "10002",
+				nickname: "",
+				hack_mobile: "136****3430",
+				avatar: ""
+			}
+		};
+		$scope.messages.push(message);
+		$timeout(function() {
+			viewScroll.scrollBottom(true);
+		}, 10);
+	};
 
 	$scope.$on('$ionicView.beforeEnter', function(event, data) {
 		// console.log($stateParams.to);

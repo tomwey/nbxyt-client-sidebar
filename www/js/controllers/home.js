@@ -8,8 +8,7 @@ angular.module('xiaoyoutong.controllers')
   var _this = this;
   
   var slideImgs = $ionicSlideBoxDelegate.$getByHandle('slideimgs');
-  slideImgs.loop(true);
-
+  
   $scope.$on('$ionicView.beforeEnter', function(event, data) {
     slideImgs.start();
   });
@@ -26,13 +25,15 @@ angular.module('xiaoyoutong.controllers')
     
       slideImgs.update();
 
-      slideImgs.slide(0);
-
-      slideImgs.stop();
-
       $timeout(function() {
+        slideImgs.loop(true);
+
+        slideImgs.slide(0);
+
+        slideImgs.stop();
+
         slideImgs.start();
-      }, 100);
+      }, 10);
     
     }, function(error) {
       console.log(error)

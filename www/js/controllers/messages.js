@@ -14,11 +14,22 @@ angular.module('xiaoyoutong.controllers')
 	});
 
 	var loadData = function() {
+		$rootScope.unread_sessions = [];
+
 		$ionicLoading.show();
 
 		DataService.get('/messages/sessions', { token: UserService.token() })
 			.then(function(res){
-				$scope.sessions = res.data.data;
+				var sessions = res.data.data;
+				
+				for (var i = 0; i < sessions.length; i++) {
+					if (sessions[i].unread_count > 0) {
+						$rootScope.unread_sessions.push({ uid: sessions[i].user.uid, unread_count: sessions[i].unread_count });
+					}
+				}
+
+				$scope.sessions = sessions;
+				console.log($scope.sessions);
 			},function(err){
 				console.log(err);
 			})
@@ -45,13 +56,22 @@ angular.module('xiaoyoutong.controllers')
 
 	$scope.$on('$ionicView.beforeEnter', function(event, data) {
 		// console.log($stateParams.to);
+		// $rootScope.unread_sessions
+
+		// 标记为已读，更新消息数量
+		var unread_sessions = $rootScope.unread_sessions;
+		for (var i = 0; i < unread_sessions.length; i++) {
+			if (unread_sessions[i].uid == $scope.to_user.uid) {
+				$rootScope.unread_message_count -= unread_sessions[i].unread_count;
+			}
+		}
 
 		$ionicLoading.show();
 
 		loadData($stateParams.to);
 
 		Chat.onReceiveMessageCallback(function(data) {
-			// console.log(data.msg);
+			console.log('收到消息了');
 			var msg = JSON.parse(data.msg);
 			msg.is_from_me = false;
 			$scope.messages.push(msg);

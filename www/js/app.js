@@ -159,12 +159,21 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
       
       if ( UserService.currentUser() ) {
         Chat.setAlias(UserService.currentUser().uid);
+
+        Chat.onReceiveMessageCallback(function(data) {
+      // console.log(data.msg);
+          console.log('收到前：' + $rootScope.unread_message_count);
+          $rootScope.unread_message_count += 1;
+          console.log('收到后：' + $rootScope.unread_message_count);
+        });
       }
     }
   });
 
   var loadUnreadMessageCount = function() {
     // $rootScope.unread_message_count = 9999;
+    $rootScope.unread_message_count = 0;
+
     if ( UserService.token() ) {
       DataService.get('/messages/unread_count', { token: UserService.token() })
       .then(function(res) {

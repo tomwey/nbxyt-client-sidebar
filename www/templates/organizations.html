@@ -1,7 +1,7 @@
 <ion-view view-title="校友组织">
 	<ion-content lazy-scroll>
 		<ion-list>
-			<ion-item class="item-remove-animate item item-thumbnail-left item-icon-right" type="item-text-wrap" href="#/app/organization-term" ng-if="organization">
+			<ion-item class="item-remove-animate item item-thumbnail-left item-icon-right" type="item-text-wrap" href="#/app/organization-term" ng-if="showOrganizationTerm == true">
 				<img image-lazy-src="{{organization.image}}">
         		<h2>校友总会</h2>
         		<p>{{organization.intro}}</p>

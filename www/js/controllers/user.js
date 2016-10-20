@@ -499,7 +499,7 @@ stu_no: '', faculty_id: '', specialty_id: '', graduation_id: ''};
           // $state.go($rootScope.login_from);
           Chat.setAlias(res.data.data.uid);
 
-          $ionicHistory.goBack(-2);
+          $ionicHistory.goBack(-3);
           AWToast.showText('注册成功', 1500);
         } else {
           // console.log(res.data.message);

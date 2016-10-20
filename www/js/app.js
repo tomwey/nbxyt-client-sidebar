@@ -141,38 +141,39 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
 
     document.addEventListener("resume", resume, false);
     function resume() {
-      loadUnreadMessageCount();
+      $rootScope.loadUnreadMessageCount();
     };
 
-    // $timeout(function() {
-    //   AWToast.showText(Device.getDevice().uuid, 1500);
-    // }, 2000);
     var uuid = Device.getDevice().uuid;
     if (uuid) {
-
-      // AWToast.showText(uuid, 1500);
-
-      // $timeout(function() {
-        // 聊天连接
-        Chat.connect(uuid);
-      // }, 2000);
+      Chat.connect(uuid);
       
       if ( UserService.currentUser() ) {
+        $rootScope.isSendingMessage = false;
         Chat.setAlias(UserService.currentUser().uid);
 
         Chat.onReceiveMessageCallback(function(data) {
-      // console.log(data.msg);
-          console.log('收到前：' + $rootScope.unread_message_count);
+          console.log(data);
           $rootScope.unread_message_count += 1;
-          console.log('收到后：' + $rootScope.unread_message_count);
+          
+          var msg = JSON.parse(data.msg);
+          var username = msg.sender.nickname || msg.sender.hack_mobile;
+          if (!$rootScope.isSendingMessage) {
+            AWToast.showText(username + ' 私信了你，尽快回复她吧', 1500);
+          }
+          
+          $rootScope.$broadcast('chat.received.message', data);
+
         });
       }
+
     }
   });
 
-  var loadUnreadMessageCount = function() {
+  $rootScope.unread_message_count = 0;
+
+  $rootScope.loadUnreadMessageCount = function() {
     // $rootScope.unread_message_count = 9999;
-    $rootScope.unread_message_count = 0;
 
     if ( UserService.token() ) {
       DataService.get('/messages/unread_count', { token: UserService.token() })
@@ -184,7 +185,7 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
     } 
   };
 
-  loadUnreadMessageCount();
+  $rootScope.loadUnreadMessageCount();
 
 })
 

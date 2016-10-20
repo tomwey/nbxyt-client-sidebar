@@ -11,6 +11,9 @@ angular.module('xiaoyoutong.controllers')
   $scope.$on('$ionicView.beforeEnter', function(event, data) {
     // console.log(123);
 
+    $scope.showOrganizationTerm = false;
+    $scope.organizations = [];
+    
     $timeout(function() {
       loadData();
     }, 0);
@@ -18,9 +21,15 @@ angular.module('xiaoyoutong.controllers')
     var loadData = function() {
 
       DataService.get('/organizations/assoc', null).then(function(result) {
-        $scope.organization = result.data.data;
+        if (result.data.code == 0) {
+          $scope.showOrganizationTerm = true;
+          $scope.organization = result.data.data;
+        } else {
+          $scope.showOrganizationTerm = false;
+        }
       }, function(error) {
         console.log(error);
+        $scope.showOrganizationTerm = false;
       }).finally(function() {
       });
 

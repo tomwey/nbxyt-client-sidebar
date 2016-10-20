@@ -5,36 +5,43 @@ angular.module('xiaoyoutong.controllers')
 // 消息会话页面
 .controller('MessageSessionsCtrl', function($scope, $rootScope, DataService, $ionicLoading, UserService) {
 
-	$scope.$on('$ionicView.beforeEnter', function(event, data) {
-		$scope.isLogined = !!UserService.token();
+	$scope.loading = false;
 
+	$scope.isLogined = !!UserService.token();
+
+	$scope.$on('$ionicView.beforeEnter', function(event, data) {
+		
+		if ($scope.isLogined) {
+			loadData();
+		} 
+	});
+
+	$scope.$on('chat.received.message', function(event, data) {
 		if ($scope.isLogined) {
 			loadData();
 		} 
 	});
 
 	var loadData = function() {
-		$rootScope.unread_sessions = [];
+		if ($scope.loading) {
+			return;
+		}
+
+		$scope.loading = true;
 
 		$ionicLoading.show();
 
 		DataService.get('/messages/sessions', { token: UserService.token() })
 			.then(function(res){
 				var sessions = res.data.data;
-				
-				for (var i = 0; i < sessions.length; i++) {
-					if (sessions[i].unread_count > 0) {
-						$rootScope.unread_sessions.push({ uid: sessions[i].user.uid, unread_count: sessions[i].unread_count });
-					}
-				}
-
 				$scope.sessions = sessions;
-				console.log($scope.sessions);
+				// console.log($scope.sessions);
 			},function(err){
 				console.log(err);
 			})
 			.finally(function() {
 				$ionicLoading.hide();
+				$scope.loading = false;
 			})
 	};
 })
@@ -52,34 +59,38 @@ angular.module('xiaoyoutong.controllers')
 
 	$scope.messages = [];
 
+	// 收到消息时会收到通知
+	$scope.$on('chat.received.message', function(event, data) {
+		addMessage(data);
+	});
+
 	var viewScroll = $ionicScrollDelegate.$getByHandle('userMessageScroll');
 
 	$scope.$on('$ionicView.beforeEnter', function(event, data) {
 		// console.log($stateParams.to);
 		// $rootScope.unread_sessions
-
-		// 标记为已读，更新消息数量
-		var unread_sessions = $rootScope.unread_sessions;
-		for (var i = 0; i < unread_sessions.length; i++) {
-			if (unread_sessions[i].uid == $scope.to_user.uid) {
-				$rootScope.unread_message_count -= unread_sessions[i].unread_count;
-			}
-		}
+		$rootScope.isSendingMessage = true;
 
 		$ionicLoading.show();
 
+		// console.log($stateParams.to);
+
 		loadData($stateParams.to);
 
-		Chat.onReceiveMessageCallback(function(data) {
-			console.log('收到消息了');
-			var msg = JSON.parse(data.msg);
-			msg.is_from_me = false;
-			$scope.messages.push(msg);
-			$timeout(function() {
-				viewScroll.scrollBottom(true);
-			}, 10);
-		});
 	});
+
+	$scope.$on('$ionicView.beforeLeave', function(event, data) {
+		$rootScope.isSendingMessage = false;
+	});
+
+	var addMessage = function(msgData) {
+		var msg = JSON.parse(msgData.msg);
+		msg.is_from_me = false;
+		$scope.messages.push(msg);
+		$timeout(function() {
+			viewScroll.scrollBottom(true);
+		}, 10);
+	};
 
 	var loadData = function(to) {
 
@@ -113,6 +124,13 @@ angular.module('xiaoyoutong.controllers')
 				$timeout(function() {
 					$scope.$broadcast('scroll.refreshComplete');
 				}, 0);
+
+				$timeout(function() {
+					if ($scope.currentPage == 1) {
+						// 刷新总的未读消息数，因为只要已进入发消息的页面，就会将未读消息标记为已读
+						$rootScope.loadUnreadMessageCount();
+					}
+				}, 100);
 			})
 	};
 

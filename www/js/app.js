@@ -151,8 +151,9 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
       if ( UserService.currentUser() ) {
         $rootScope.isSendingMessage = false;
         Chat.setAlias(UserService.currentUser().uid);
+      }
 
-        Chat.onReceiveMessageCallback(function(data) {
+      Chat.onReceiveMessageCallback(function(data) {
           console.log(data);
           $rootScope.unread_message_count += 1;
           
@@ -164,8 +165,7 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
           
           $rootScope.$broadcast('chat.received.message', data);
 
-        });
-      }
+      });
 
     }
   });
@@ -174,13 +174,14 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
 
   $rootScope.loadUnreadMessageCount = function() {
     // $rootScope.unread_message_count = 9999;
-
+    console.log('app里面刷新消息');
     if ( UserService.token() ) {
       DataService.get('/messages/unread_count', { token: UserService.token() })
       .then(function(res) {
-        if (res.data.count) {
-          $rootScope.unread_message_count = res.data.count;
-        } 
+        // console.log(res);
+        // if (res.data.count) {
+        $rootScope.unread_message_count = res.data.count;
+        // } 
       });
     } 
   };

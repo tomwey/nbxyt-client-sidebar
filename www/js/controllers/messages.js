@@ -17,6 +17,7 @@ angular.module('xiaoyoutong.controllers')
 	});
 
 	$scope.$on('chat.received.message', function(event, data) {
+		console.log('在会话页面：收到消息');
 		if ($scope.isLogined) {
 			loadData();
 		} 
@@ -61,6 +62,7 @@ angular.module('xiaoyoutong.controllers')
 
 	// 收到消息时会收到通知
 	$scope.$on('chat.received.message', function(event, data) {
+		// console.log('messages: ' + data);
 		addMessage(data);
 	});
 
@@ -127,6 +129,7 @@ angular.module('xiaoyoutong.controllers')
 
 				$timeout(function() {
 					if ($scope.currentPage == 1) {
+						console.log('刷新消息');
 						// 刷新总的未读消息数，因为只要已进入发消息的页面，就会将未读消息标记为已读
 						$rootScope.loadUnreadMessageCount();
 					}

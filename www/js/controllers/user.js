@@ -6,7 +6,7 @@
  angular.module('xiaoyoutong.controllers')
 
  // 我的
-.controller('UserCtrl', function($scope,$ionicHistory, $state, FormCheck, PopupService, DataService, $ionicLoading, UserService, AWToast, $cordovaCamera, $timeout, $interval) {
+.controller('UserCtrl', function($scope,$ionicHistory, $state, FormCheck, PopupService, DataService, $ionicLoading, UserService, AWToast, $cordovaCamera, $timeout, $interval, $rootScope) {
   
   $scope.noReadonly = false;
 
@@ -228,6 +228,8 @@
       UserService.logout();
       AWToast.showText('退出登录成功', 1500);
       $ionicHistory.goBack();
+
+      $rootScope.unread_message_count = 0;
     })
 
   };

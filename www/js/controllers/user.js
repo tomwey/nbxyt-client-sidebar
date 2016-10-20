@@ -296,7 +296,7 @@
 })
 
 // 登录
-.controller('LoginCtrl', function($scope,$ionicHistory, $state, $rootScope, DataService, $ionicLoading, FormCheck, UserService, AWToast) {
+.controller('LoginCtrl', function($scope,$ionicHistory, Chat, $state, $rootScope, DataService, $ionicLoading, FormCheck, UserService, AWToast) {
   $scope.user = {mobile: '', password: ''};
 
   $scope.doLogin = function() {
@@ -312,6 +312,7 @@
       if (res.data.code === 0) {
         UserService.login(res.data.data);
         // $state.go($rootScope.login_from);
+        Chat.setAlias(res.data.data.uid);
         AWToast.showText('登录成功', 1500);
         $ionicHistory.goBack();
       } else {
@@ -397,7 +398,7 @@
 })
 
 // 注册第二步
-.controller('SignupFinalCtrl', function($scope, $state, $ionicHistory, AWToast, FormCheck, DataService, $ionicLoading, $filter, $rootScope, UserService) {
+.controller('SignupFinalCtrl', function($scope, $state, $ionicHistory, AWToast, FormCheck, DataService, $ionicLoading, $filter, $rootScope, UserService, Chat) {
   $scope.user = {mobile: '', password: '', code: '', realname: '',
 stu_no: '', faculty_id: '', specialty_id: '', graduation_id: ''};
 
@@ -465,6 +466,8 @@ stu_no: '', faculty_id: '', specialty_id: '', graduation_id: ''};
         if (res.data.code === 0) {
           UserService.login(res.data.data);
           // $state.go($rootScope.login_from);
+          Chat.setAlias(res.data.data.uid);
+
           $ionicHistory.goBack(-2);
           AWToast.showText('注册成功', 1500);
         } else {

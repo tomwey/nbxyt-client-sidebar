@@ -150,16 +150,16 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
     var uuid = Device.getDevice().uuid;
     if (uuid) {
 
-      AWToast.showText(uuid, 1500);
+      // AWToast.showText(uuid, 1500);
 
-      $timeout(function() {
+      // $timeout(function() {
         // 聊天连接
         Chat.connect(uuid);
-      }, 2000);
+      // }, 2000);
       
-      // if (UserService.currentUser()) {
-      //   Chat.setAlias(UserService.currentUser().uid);
-      // }
+      if ( UserService.currentUser() ) {
+        Chat.setAlias(UserService.currentUser().uid);
+      }
     }
   });
 

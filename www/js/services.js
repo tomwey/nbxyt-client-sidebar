@@ -98,7 +98,6 @@ angular.module('xiaoyoutong.services', [])
   this.login = function(user) {
     console.log(user);
     if (user) {
-      Chat.setAlias(user.uid);
       $localStorage.storeObject('user', user);
     }
   };

@@ -5,13 +5,6 @@ angular.module('xiaoyoutong.controllers')
 // 消息会话页面
 .controller('MessageSessionsCtrl', function($scope, $rootScope, DataService, $ionicLoading, UserService) {
 
-	document.addEventListener("jpush.receiveNotification", onReceiveNotification, false);
-
-	var onReceiveNotification = function(event) {
-		console.log(123);
-		alert(event);
-	};
-
 	$scope.$on('$ionicView.beforeEnter', function(event, data) {
 		$scope.isLogined = !!UserService.token();
 
@@ -61,7 +54,7 @@ angular.module('xiaoyoutong.controllers')
 			msg.is_from_me = false;
 			$scope.messages.push(msg);
 			$timeout(function() {
-					viewScroll.scrollBottom(true);
+				viewScroll.scrollBottom(true);
 			}, 10);
 		});
 	});
@@ -74,10 +67,12 @@ angular.module('xiaoyoutong.controllers')
 				if (res.data.code === 0) {
 					if ($scope.currentPage === 1) {
 						$scope.totalPage = ( res.data.total + $scope.pageSize - 1 ) / $scope.pageSize;
-						$scope.messages = $scope.messages.concat(res.data.data);
+						$scope.messages = res.data.data;
+
+						// viewScroll.resize();
 						$timeout(function() {
-							viewScroll.scrollBottom(true);
-						}, 0);
+							viewScroll.scrollBottom(false);
+						}, 100);
 					} else {
 						$scope.messages = res.data.data.concat($scope.messages);
 						if (res.data.data.length == 0) {

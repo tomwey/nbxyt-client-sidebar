@@ -216,3 +216,8 @@ img.profile-pic.right {
 	color: rgb(137,137,137);
 	font-size: 14px
 }
+
+.unread-message-count.badge {
+  position: absolute;
+  top: 36px;
+}

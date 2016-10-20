@@ -161,7 +161,7 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
   });
 
   var loadUnreadMessageCount = function() {
-    $rootScope.unread_message_count = 9999;
+    // $rootScope.unread_message_count = 9999;
     if ( UserService.token() ) {
       DataService.get('/messages/unread_count', { token: UserService.token() })
       .then(function(res) {

@@ -9,7 +9,7 @@
     <!-- 我收到的消息 -->
       <div ng-if="message.is_from_me == false">              
           <img class="profile-pic left" 
-              ng-src="{{message.sender.avatar}}" onerror="onProfilePicError(this)" />
+              ng-src="{{message.sender.avatar || 'img/default_avatar.png'}}" onerror="onProfilePicError(this)" />
 
           <div class="chat-bubble left">
               <div class="message">

@@ -149,15 +149,18 @@ angular.module('xiaoyoutong', ['ionic', 'xiaoyoutong.controllers', 'xiaoyoutong.
     // }, 2000);
     var uuid = Device.getDevice().uuid;
     if (uuid) {
-      // 聊天连接
-      Chat.connect(uuid);
-      
-      if (UserService.currentUser()) {
-        Chat.setAlias(UserService.currentUser().uid);
-      }
-    }
-    
 
+      AWToast.showText(uuid, 1500);
+
+      $timeout(function() {
+        // 聊天连接
+        Chat.connect(uuid);
+      }, 2000);
+      
+      // if (UserService.currentUser()) {
+      //   Chat.setAlias(UserService.currentUser().uid);
+      // }
+    }
   });
 
   var loadUnreadMessageCount = function() {

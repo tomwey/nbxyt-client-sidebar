@@ -1,27 +1,9 @@
-(function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(['socket.io-client'], function (io) {
-            return (root.returnExportsGlobal = factory(io));
-        });
-    } else if (typeof module === 'object' && module.exports) {
-        // Node. Does not work with strict CommonJS, but
-        // only CommonJS-like enviroments that support module.exports,
-        // like Node.
-        module.exports = factory(require('socket.io-client'));
-    } else {
-        // Browser globals
-        root.Yunba = factory(root.io);
-    }
-}(this, function(io) {
-
 var Yunba;
 var DEF_SERVER = 'sock.yunba.io';
 var DEF_PORT = 3000;
 var QOS0 = 0;
 var QOS1 = 1;
 var QOS2 = 2;
-var MSG_MISSING_APPKEY = 'appkey不能为空';
 var MSG_MISSING_MESSAGE = 'Missing Message';
 var MSG_MISSING_CHANNEL = 'Missing Channel';
 var MSG_ERROR_CHANNEL = 'Topic 只支持英文数字下划线，长度不超过50个字符。';
@@ -66,7 +48,6 @@ var __MessageIdUtil = {
     }
 };
 
-var isBrowser = typeof window === 'object' && window.window === window;
 var __CookieUtil = {
     get: function (name) {
         var cookieName = encodeURIComponent(name) + "=",
@@ -110,9 +91,6 @@ var __CookieUtil = {
     },
 
     isSupport: function () {
-        if (!isBrowser) {
-            return false;
-        }
         var isSupport = false;
         if (typeof(navigator.cookieEnabled) != 'undefined') {
             isSupport = navigator.cookieEnabled;
@@ -124,17 +102,38 @@ var __CookieUtil = {
     }
 };
 
+Array.prototype.contain = function (val) {
+    for (var i = 0; i < this.length; i++) {
+        if (this[i] == val) {
+            return true;
+        }
+    }
+    return false;
+};
 
+Array.prototype.indexOf = function (val) {
+    for (var i = 0; i < this.length; i++) {
+        if (this[i] == val) return i;
+    }
+    return -1;
+};
 
+Array.prototype.remove = function (val) {
+    var index = this.indexOf(val);
+    if (index > -1) {
+        this.splice(index, 1);
+    }
+};
+
+Yunba = (function () {
 
     function Yunba(setup) {
         setup = setup || {};
-        this.secure = setup['secure'] === undefined ? false : setup['secure'];
         this.server = setup['server'] || DEF_SERVER;
         this.port = setup['port'] || DEF_PORT;
         this.auto_reconnect = setup['auto_reconnect'] || false;
         if (!setup['appkey']) {
-            throw new Error(MSG_MISSING_APPKEY);
+            return false;
         } else {
             this.appkey = setup['appkey'];
         }
@@ -172,7 +171,7 @@ var __CookieUtil = {
         var socketio_connect = function () {
             try {
                 __log('js client start init...');
-                me.socket = io.connect(me.server + ':' + me.port, {'force new connection': true, 'secure': me.secure});
+                me.socket = io.connect('http://' + me.server + ':' + me.port, {'force new connection': true});
                 me.socket.on('connect', function () {
                     __log('js client init success.');
                     me.socket_connected = true;
@@ -373,7 +372,7 @@ var __CookieUtil = {
                 this.socket.emit('connect_v2', {appkey: this.appkey, customid: customid});
 
             } else {
-                this.socket.emit('connect', {appkey: this.appkey});
+                this.socket.emit('connect_v2', {appkey: this.appkey});
             }
 
         } catch (err) {
@@ -699,7 +698,7 @@ var __CookieUtil = {
     Yunba.prototype._validate_topic = function (topic, callback) {
         if (!topic) {
             return __error(MSG_MISSING_CHANNEL) && callback(false, MSG_MISSING_CHANNEL);
-        } else if (topic.length > 50 || !/^([a-zA-Z0-9_\/#\+]*)$/.test(topic)) {
+        } else if (topic.length > 50 || !/^([a-zA-Z0-9_]*)$/.test(topic)) {
             return __error(MSG_ERROR_CHANNEL) && callback(false, MSG_ERROR_CHANNEL);
         }
         return true;
@@ -733,7 +732,4 @@ var __CookieUtil = {
 
     return Yunba;
 
-
-
-    
-}));
+})();

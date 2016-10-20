@@ -46,6 +46,8 @@ angular.module('xiaoyoutong.controllers')
 	$scope.$on('$ionicView.beforeEnter', function(event, data) {
 		// console.log($stateParams.to);
 
+		$ionicLoading.show();
+
 		loadData($stateParams.to);
 
 		Chat.onReceiveMessageCallback(function(data) {
@@ -60,7 +62,6 @@ angular.module('xiaoyoutong.controllers')
 	});
 
 	var loadData = function(to) {
-		$ionicLoading.show();
 
 		DataService.get('/messages', { token: UserService.token(), to: $scope.to_user.uid, need_sort: 1, page: $scope.currentPage, size: $scope.pageSize })
 			.then(function(res){
@@ -74,7 +75,6 @@ angular.module('xiaoyoutong.controllers')
 							viewScroll.scrollBottom(false);
 						}, 100);
 					} else {
-						$scope.messages = res.data.data.concat($scope.messages);
 						if (res.data.data.length == 0) {
 							AWToast.showText('没有更多数据了', 1500);
 						} else {

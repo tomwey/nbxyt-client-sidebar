@@ -19,14 +19,17 @@
     </ion-header-bar>
     <ion-content>
       <ion-list>
-        <ion-item menu-close href="#/app/home">
+        <ion-item menu-close href="#/app/home" class="item-icon-left">
+          <i class="icon ion-ios-home-outline"></i>
           首页
         </ion-item>
-        <ion-item menu-close href="#/app/message-sessions">
+        <ion-item menu-close href="#/app/message-sessions" class="item-icon-left">
+          <i class="icon ion-ios-chatbubble-outline"></i>
           消息
           <span class="badge badge-assertive" ng-if="unread_message_count > 0">{{unread_message_count >= 100 ? '99+' : unread_message_count }}</span>
         </ion-item>
-        <ion-item menu-close href="#/app/setting">
+        <ion-item menu-close href="#/app/setting" class="item-icon-left">
+          <i class="icon ion-ios-gear-outline"></i>
           我的
         </ion-item>
       </ion-list>

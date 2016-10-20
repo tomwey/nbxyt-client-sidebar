@@ -124,10 +124,9 @@ angular.module('xiaoyoutong.controllers')
 
 					Chat.sendToUser($scope.message.to, JSON.stringify(msg), function(success, msg, to_user) {
 						if (success) {
-							AWToast.showText('发送成功: ' + to_user, 1500);
-
+							// AWToast.showText('发送成功: ' + to_user, 1500);
 						} else {
-							AWToast.showText('发送失败: ' + to_user, 1500);
+							AWToast.showText('Oops, 消息发送失败了', 1500);
 						}
 			
 					});

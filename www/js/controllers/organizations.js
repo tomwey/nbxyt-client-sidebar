@@ -6,22 +6,36 @@
 angular.module('xiaoyoutong.controllers')
 
 // 校友组织列表
-.controller('OrganizationsCtrl', function($scope, DataService, $ionicLoading) {
+.controller('OrganizationsCtrl', function($scope, DataService, $ionicLoading, $timeout, AWToast) {
+  // console.log(123);
+  $scope.$on('$ionicView.beforeEnter', function(event, data) {
+    // console.log(123);
 
-  $ionicLoading.show();
-  
-  DataService.get('/organizations/assoc', null).then(function(result) {
-    $scope.organization = result.data.data;
-  }, function(error) {
-    console.log(error);
-  }).finally(function() {
-    DataService.get('/organizations', null).then(function(result){
-      $scope.organizations = result.data.data;
-      $ionicLoading.hide();
-    },function(error){
-      $ionicLoading.hide();
-    });
+    $timeout(function() {
+      loadData();
+    }, 0);
+
+    var loadData = function() {
+
+      DataService.get('/organizations/assoc', null).then(function(result) {
+        $scope.organization = result.data.data;
+      }, function(error) {
+        console.log(error);
+      }).finally(function() {
+      });
+
+      $ionicLoading.show();
+      DataService.get('/organizations', null).then(function(result){
+          $scope.organizations = result.data.data;
+        },function(error){
+          AWToast.showText('服务器出错', 1500);
+        }).finally(function() {
+          $ionicLoading.hide();
+        });
+    };
+    
   });
+  
 })
 
 // 校友总会详情页

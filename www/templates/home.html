@@ -4,11 +4,11 @@
         pulling-text="下拉刷新"
         on-refresh="doRefresh()">
     </ion-refresher>
-    <ion-slide-box auto-play="true" does-continue="true" show-pager="true" id="detail-slide-box" delegate-handle="slideimgs">
+    <ion-slide-box auto-play="true" show-pager="true" id="detail-slide-box" delegate-handle="slideimgs">
       <ion-slide ng-repeat="banner in banners">
           <a class="item-image" ng-click="gotoBannerDetail(banner);">
           <!-- href="#/app/{{banner.bannerable_type}}s/{{banner.bannerable_id}}" -->
-          <img image-lazy-src="{{banner.image}}" alt="" class="banner-image"></a>
+          <img ng-src="{{banner.image}}" alt="" class="banner-image"></a>
       </ion-slide>           
     </ion-slide-box>
 

@@ -10,11 +10,11 @@
 						<div class="col col-20 col-center">
 							<span class="label">手机号</span>
 						</div>
-						<div class="col col-50 col-center">
+						<div class="col col-40 col-center">
 							<input type="tel" ng-model="updateUser.new_mobile" placeholder="输入新手机号">
 						</div>
-						<div class="col col-30 col-center offset-50">
-							<a class="assertive code-button" ng-click="doFetchCode();">获取验证码</a>
+						<div class="col col-40 col-center" style="text-align:right;padding-right: 10px;">
+              <a class="button button-assertive button-clear" ng-click="doFetchCode();" ng-disabled="!canFetchCode">{{fetchCodeTitle}}</a>
 						</div>
 					</div>
 				</div>

@@ -235,11 +235,12 @@
 })
 
 // 忘记密码
-.controller('PasswordCtrl', function($scope, $state, FormCheck, PopupService, DataService, $ionicLoading, UserService, AWToast) {
+.controller('PasswordCtrl', function($scope, $state, FormCheck, PopupService, DataService, $ionicLoading, UserService, AWToast, $interval) {
 
   $scope.updateUser = { nickname: '', mobile: '', new_mobile: '', code: '', password: '' };
 
-  $scope.noReadonly = true;
+  $scope.canFetchCode = true;
+  $scope.fetchCodeTitle = "获取验证码";
 
   // 获取验证码
   $scope.fetchCode = function() {
@@ -247,6 +248,19 @@
     !FormCheck.regex_validate($scope.updateUser.mobile, /^1[34578]\d{9}$/, '手机号不正确') ) {
       return;
     }
+
+    $scope.canFetchCode = false;
+    
+    // 倒计时
+    var seconds = 60;
+    var timer = $interval(function() {
+      $scope.fetchCodeTitle = --seconds + '';
+      if (seconds == 0) {
+        $scope.fetchCodeTitle = "获取验证码";
+        $scope.canFetchCode = true;
+        $interval.cancel(timer);
+      }
+    }, 1000);
 
     $ionicLoading.show();
     DataService.post('/auth_codes', { mobile: $scope.updateUser.mobile }).then(function(res) {
@@ -336,7 +350,7 @@
 })
 
 // 注册
-.controller('SignupCtrl', function($scope, $state, AWToast, FormCheck, DataService, $ionicLoading, $filter, $rootScope) {
+.controller('SignupCtrl', function($scope, $state, AWToast, FormCheck, DataService, $ionicLoading, $filter, $rootScope, $interval) {
   $scope.user = {mobile: '', password: '', code: ''};
 
   $scope.doCheckCode = function() {
@@ -371,6 +385,10 @@
 
   };
 
+
+  $scope.fetchCodeTitle = "获取验证码";
+  $scope.canFetchCode = true;
+
   // 获取验证码
   $scope.doFetchCode = function() {
     // alert('123');
@@ -378,6 +396,19 @@
     !FormCheck.regex_validate($scope.user.mobile, /^1[34578]\d{9}$/, '手机号不正确') ) {
       return;
     }
+
+    $scope.canFetchCode = false;
+    
+    // 倒计时
+    var seconds = 60;
+    var timer = $interval(function() {
+      $scope.fetchCodeTitle = --seconds + '';
+      if (seconds == 0) {
+        $scope.fetchCodeTitle = "获取验证码";
+        $scope.canFetchCode = true;
+        $interval.cancel(timer);
+      }
+    }, 1000);
 
     $ionicLoading.show();
     DataService.post('/auth_codes', { mobile: $scope.user.mobile }).then(function(res) {

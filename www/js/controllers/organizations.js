@@ -130,11 +130,10 @@ angular.module('xiaoyoutong.controllers')
     $scope.organ_id = id;
     
     var token = UserService.token();
-
-    console.log(token);
     if (!token) {
       $rootScope.login();
     } else {
+      console.log(token);
       $ionicLoading.show();
       DataService.post('/relationships/organization/join', { token: token, id: $scope.organ_id }).then(function(resp){
         if (resp.data.code == 0) {

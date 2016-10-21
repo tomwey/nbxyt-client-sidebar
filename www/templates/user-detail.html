@@ -1,7 +1,7 @@
 <ion-view>
-	<ion-nav-title>{{user.nickname || user.hack_mobile}}的信息</ion-nav-title>
+	<ion-nav-title ng-show="!!user">{{user.nickname || user.hack_mobile}}的信息</ion-nav-title>
 	<ion-content>
-		<div class="card list">
+		<div class="card list" ng-if="!!user">
 			<div class="item item-divider">基本信息</div>
 			<div class="item item-avatar item-icon-right item-button-right">
 				<img ng-src="{{user.avatar || 'img/default_avatar.png'}}">
@@ -11,7 +11,7 @@
 			</div>
 			
 		</div>
-		<div class="card list">
+		<div class="card list" ng-if="!!user">
 			<div class="item item-divider">详细信息</div>
 			<div class="item">
 				<p>姓名：{{user.realname}}</p>

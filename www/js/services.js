@@ -1,5 +1,5 @@
 angular.module('xiaoyoutong.services', [])
-.constant('apiHost', 'http://xyt.deyiwifi.com/api/v1')
+.constant('apiHost', 'http://10.0.16.54:3000/api/v1')
 .constant('PAGE_SIZE', 15)
 .constant('YB_APP_KEY', '58076c8cd69873332db470f6')
 .service('AccessKeyService', function($base64) {

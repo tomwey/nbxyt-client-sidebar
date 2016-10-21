@@ -51,3 +51,21 @@ angular.module('xiaoyoutong.controllers')
 
   $scope.sections = sectionFactory.all();
 })
+
+.directive('setImage', function () {
+  return {
+    restrict: 'A',
+    link: function (scope, elem, attrs) {
+      attrs.$observe('image', function (val) {
+        if (val) {
+          elem.css('background', 'url("' + val + '") #eee no-repeat center center');
+          elem.css('background-size', 'cover');
+        }
+        else{
+          elem.css('background', '#eee');
+        }
+      });
+    }
+  };
+})
+;

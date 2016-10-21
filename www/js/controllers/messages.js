@@ -186,5 +186,6 @@ angular.module('xiaoyoutong.controllers')
 				$ionicLoading.hide();
 			})
 	};
+
 })
 	

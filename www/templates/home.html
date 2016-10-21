@@ -8,7 +8,7 @@
       <ion-slide ng-repeat="banner in banners">
           <a class="item-image" ng-click="gotoBannerDetail(banner);">
           <!-- href="#/app/{{banner.bannerable_type}}s/{{banner.bannerable_id}}" -->
-          <img ng-src="{{banner.image}}" alt="" class="banner-image"></a>
+          <img ng-src="{{banner.image}}" alt="" class="banner-image" set-image></a>
       </ion-slide>           
     </ion-slide-box>
 

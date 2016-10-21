@@ -1,10 +1,11 @@
 <ion-view view-title="发消息给{{to_user.nickname || to_user.hack_mobile}}">
   <ion-content has-bouncing="true" delegate-handle="userMessageScroll">
     <ion-refresher
-      pulling-text="加载消息历史..."
+      pulling-text="加载历史消息..."
       pulling-icon="ion-ios-loop"
       on-refresh="loadMore();">
     </ion-refresher>
+
     <div collection-repeat="message in messages" class="message-wrapper">
     <!-- 我收到的消息 -->
       <div ng-if="message.is_from_me == false">              
